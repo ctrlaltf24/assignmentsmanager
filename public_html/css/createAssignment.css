@@ -1,0 +1,15 @@
+#questions .mdl-grid{
+	padding: 0px;
+}
+#questions .mdl-grid .mdl-cell{
+	margin: 0px;
+}
+#questions .mdl-card__supporting-text #main-form.mdl-grid{
+	padding: 8px;
+}
+#questions .mdl-card__supporting-text{
+	padding-bottom:0px;
+}
+#questions .mdl-card__supporting-text #extra-form > .mdl-cell:last-of-type{
+	padding-bottom:16px !important;
+}

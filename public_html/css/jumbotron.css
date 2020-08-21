@@ -1,0 +1,103 @@
+.jumbotronCap {
+    width: calc(100% - 32px);
+    text-align:  center;
+    bottom:  0;
+    padding-left: 32px;
+}
+.jumbotronCapText {
+    max-width: 800px;
+    margin-left: 25%;
+    padding: 24px;
+    text-align: left;
+    color:  #fff;
+}
+.jumbotronCapText p {
+    padding-top:  8px;
+    color: #fff;
+}
+.jumbotronCapText a i {
+    vertical-align: middle;
+}
+.jumbotronCapText a.mdl-button{
+    position: relative;
+    left: -16px;
+}
+@media (max-width: 839px) {
+    .jumbotronCapText {
+        margin-left: 0;
+        padding: 16px;
+    }
+}
+.jumbotron:first-of-type .mdl-grid{
+    margin-top: 0px;
+}
+.jumbotron{
+    background-image: url('https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=700&h=150');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #f1f1f1;
+    width: 100%;
+    height: auto;
+    padding-bottom: 10px;
+    position: relative;
+}
+.jumbotron .mdl-grid{
+    height: 100%;
+    align-content: flex-end;
+    text-align: center;
+    width: 85%;
+    margin: 5px auto;
+}
+.jumbotron .mdl-grid h1.darkBackground{
+    background-color: rgba(158,158,158,.75);
+    width: 500px;
+    margin: 5px auto;
+}
+.jumbotron .mdl-grid h1{
+    color: #fafafa;
+    position: relative;
+    z-index: 1;
+}
+.jumbotron .mdl-grid [class*="mdl-cell--"]{
+    align-self:flex-end;
+}
+@media only screen and (min-width: 250px){
+    .jumbotron{
+        height: 400px;
+    }
+    .main-contained {
+        width: 95%;
+    }
+}
+@media only screen and (min-width: 500px){
+    .jumbotron{
+        height: 475px;
+    }
+    .main-contained {
+        width: 90%;
+    }
+}
+@media only screen and (min-width: 1000px){
+    .jumbotron{
+        height: 550px;
+    }
+    .main-contained {
+        width: 85%;
+    }
+}
+/*
+example
+<div class="jumbotron" style="background-image: url('/img/Home-Jumb1.jpg')"></div>
+<div class="jumbotronCap" style="background-color: #263238">
+    <div class="jumbotronCapText">
+        <div class="mdl-typography--display-2 mdl-typography--font-thin">Title</div>
+        <p class="mdl-typography--headline mdl-typography--font-thin">
+            Description
+        </p>
+            <a href="BlogPage.php" class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple">
+                Read More&nbsp;<i class="material-icons">chevron_right</i>
+            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+    </div>
+</div>
+ */
