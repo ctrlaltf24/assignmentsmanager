@@ -1,0 +1,101 @@
+.mdl-layout__drawer-button i.material-icons{
+    padding:10px;
+}
+.page-content{
+    min-height: calc(100% - 100px);
+}
+div.mdl-card{
+    width:100%;
+}
+.mdl-layout__header .mdl-logo{
+    height:75%;
+    width:auto;
+    margin: 8px;
+}
+.mdl-layout__header a.mdl-layout-title{
+    color:inherit;
+    text-decoration: inherit;
+}
+.mdl-layout__drawer{
+    width:300px;
+    transform: translateX(-300px);
+}
+.mdl-textfield{
+    width:100%;
+}
+.recursive-input{
+    width:calc(100% - 32px);
+}
+.mdl-menu__container{
+    width: 100% !important;
+}
+.mdl-card__supporting-text{
+    padding-top: 0px;
+}
+.disabled{
+    color: rgba(0,0,0,.26) !important;
+    cursor: default;
+    background-color: transparent !important;
+}
+.mdl-radio{
+    height: inherit;
+}
+.mdl-card__supporting-text{
+     width: auto !important;
+}
+.mdl-progress{
+     width: 100%;
+}
+.mdl-card{
+     min-height: 0px !important;
+}
+.mdl-data-table th{
+    max-width: 100%;
+    white-space: normal;
+}
+.mdl-checkbox{
+    height: auto;
+}
+.mdl-data-table td,.mdl-data-table th{
+    text-align: left;
+}
+table .mdl-checkbox{
+    height: 24px;
+}
+.mdl-card__menu-wide{
+	width: 100%;
+	top: 8px;
+	position: absolute;
+}
+.mdl-card__menu-wide > :first-child {
+	left:8px;
+	position: absolute;
+}
+.mdl-card__menu-wide > :nth-child(2) {
+	left:74px;
+	position: absolute;
+}
+.mdl-card__menu-wide > :last-child {
+	right:8px;
+	position: absolute;
+}
+.mdl-card__supporting-text h5{
+	margin:0px;
+}
+.MJXc-display{
+	display: inline !important;
+	margin: 0px !important;
+}
+.mdl-card__title-text *{
+	display:contents;
+}
+.mdl-card__title-text .mdl-chip *{
+	display:inline-block;
+}
+.mdl-card__title-text .mdl-chip{
+	display:block;
+}
+.mdl-card__title-text strong{
+	padding: 0px 4px;
+	font-weight: 900;
+}

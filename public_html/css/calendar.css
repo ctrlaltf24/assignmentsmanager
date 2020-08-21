@@ -1,0 +1,9 @@
+iframe.calendar{
+    width:500px !important;
+    height: 490px !important;
+    padding:8px;
+}
+.mdl-menu li.mdl-menu__item .calendar{
+    width:516px !important;
+    height: 516px !important;
+}
