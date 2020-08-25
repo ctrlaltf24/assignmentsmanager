@@ -39,9 +39,6 @@ echo template_header(true,$logged_in,$is_teacher);
                 <li class="mdl-list__item">
                     <span class="mdl-list__item-primary-content">Answer reporting</span>
                 </li>
-                <li class="mdl-list__item">
-                    <span class="mdl-list__item-primary-content">No IP address long-term storage (small cache is kept to protect users during a session)</span>
-                </li>
             </ul>
         </div>
     </div>
