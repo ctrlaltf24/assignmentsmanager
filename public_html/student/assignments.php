@@ -34,18 +34,18 @@ foreach ($classes as $key=>$value) {
                                         echo template_assignment($row["period"],$value2,$row2["name"], $row2["concept"], $row2["chapter"], $row2["timeAccessible"], $row2["timeHide"], $row2["timeDue"], $row2["disabled"]);
                                     }
                                } else {
-                                    echo "failed to find uncompleted assignment";
+                                    log_error("find uncompleted assignment","databse","key $value2 isTeacher ".($is_teacher?"true":" false"));
                                }
                             }
                         } else {
-                            echo "Error 2nd teir";
+                            log_error("find uncompleted assignment","databse","key $value2 isTeacher ".($is_teacher?"true":" false"). " error ".$conn->error);
                         }
                     }
                 }
                 echo "<h4>Completed Assignments</h4>$completedAssignmentsHtml</div>";
             }
         } else {
-            echo "Error $value";
+            log_error("find uncompleted assignment","databse","key $value ". " error ".$conn->error);
         }
     }
 }

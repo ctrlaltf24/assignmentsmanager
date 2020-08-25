@@ -53,7 +53,7 @@ if(isset($_FILES["fileToUpload"])) {
                 echo "The file " . basename($_FILES["fileToUpload"]["name"][$i]) . " has been uploaded.<br>";
                 echo "<img style=\"width:100%\" src=\"$target_dir". basename($_FILES["fileToUpload"]["name"][$i])."\" />";
             } else {
-                echo "Sorry, there was an error uploading your file.<br>";
+                log_error("uploading file","",$_FILES["fileToUpload"]["tmp_name"][$i]." ".$target_file);
             }
         }
     }

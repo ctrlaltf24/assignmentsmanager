@@ -30,8 +30,13 @@ function triggerSave(form) {
     }
     $.post($(form).prop("action"), postData, function(data) {
         if(!$(form).prop("action").includes("?key=")){
-            $(form).prop("action",$(form).prop("action")+"?key="+data);
-            $(form).prop("id","question-form-key-"+data);
+            if(isNaN(Number(data))){
+                alert("Key not valid! "+data);
+                return;
+            } else {
+                $(form).prop("action",$(form).prop("action")+"?key="+data);
+                $(form).prop("id","question-form-key-"+data);
+            }
         }
         if($("#add_more_questions").is("[disabled]")){
 	        $("#add_more_questions").removeAttr("disabled");
