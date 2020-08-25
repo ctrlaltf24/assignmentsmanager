@@ -3,15 +3,15 @@ include "template/ui.php";
 require_once "../resources/connect.php";
 require_once "../resources/startsWithEndsWith.php";
 //template header put in later
-$domain = ($_SERVER['HTTP_HOST'] != 'localhost'&&!endsWith($_SERVER['HTTP_HOST'],".localhost")) ? $_SERVER['HTTP_HOST'] : false;
+//$domain = ($_SERVER['HTTP_HOST'] != 'localhost'&&!endsWith($_SERVER['HTTP_HOST'],".localhost")) ? $_SERVER['HTTP_HOST'] : false;
 //setcookie("token","asfdasfafajdaesf098sudlj2mqcau5 30126tpio0ju89sflkajlskdjlads",(time()+60*60*1000),"/",$domain,($domain!=false?true:false),true);
 $conn->query("DELETE FROM token WHERE expire<".time());//clear out old entries
 //check to see if the user is already in the database, if so delete them.
 
 echo template_header(true,$logged_in,$is_teacher);
-if($result = $conn->query("SELECT * FROM token WHERE token = \"".session_id()."\" AND expire>".time())) {
+if($result = $conn->query("SELECT * FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time())) {
     if ($result->num_rows != 0) {
-        $conn->query("DELETE FROM token WHERE token = \"".session_id()."\" AND expire>".time());
+        $conn->query("DELETE FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time());
     }
 }
 //add token to temparary token db
