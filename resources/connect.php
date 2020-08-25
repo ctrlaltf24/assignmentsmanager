@@ -12,6 +12,7 @@ session_start([
 ]);
 $conn=null;
 $user=null;
+require_once "logError.php";
 if(isset($demo)&&$demo){
     require_once "connectDemo.php";
 } else {
