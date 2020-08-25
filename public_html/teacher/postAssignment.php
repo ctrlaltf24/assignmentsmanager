@@ -40,8 +40,7 @@ if(isset($_GET["key"])){
     $col_id = $_GET["key"];
     if($query!="") {
         if (!$conn->query("UPDATE `assignments` SET " . $query . " WHERE `key`=" . $_GET["key"])) {
-            echo "UPDATE `assignments` SET " . $query . " WHERE `key`=" . $_GET["key"];
-            echo "<h2>Failure :( in update</h2>";
+            log_error("update assignment","databse",$conn->error);
         } else {
             echo $col_id;
         }
@@ -50,7 +49,7 @@ if(isset($_GET["key"])){
     //handle like an insert
 	if(!$conn->query("INSERT INTO `assignments`(`name`, `subject`, `chapter`, `concept`, `timeAccessible`, `timeHide`, `timeDue`, `disabled`, `questions`, `randomizeOrder`, `infiniteTries`,`teacherKey`) VALUES (\"".$_POST["name"]."\",\"".$_POST["subject"]."\",\"".$_POST["chapter"]."\",\"".$_POST["concept"]."\",".$_POST["timeAccessible"].",".$_POST["timeHide"].",".$_POST["timeDue"].",".(isset($_POST["disabled"])&&$_POST["disabled"]==="on"?1:0).",\"\",".(isset($_POST["randomizeOrder"])&&$_POST["randomizeOrder"]==="on"?1:0).",".(isset($_POST["infiniteTries"])&&$_POST["infiniteTries"]==="on"?1:0).",\"".$user["key"]."\")")){
         $col_id=$conn->insert_id;
-        echo "<h2 onload=window.location='addQuestions?assignment=".$col_id.">Failure :(<".$conn->error."><br>"."INSERT INTO `assignments`(`name`, `subject`, `chapter`, `concept`, `timeAccessible`, `timeHide`, `timeDue`, `disabled`, `questions`, `randomizeOrder`, `infiniteTries`,`teacherKey`) VALUES (\"".$_POST["name"]."\",\"".$_POST["subject"]."\",\"".$_POST["chapter"]."\",\"".$_POST["concept"]."\",".$_POST["timeAccessible"].",".$_POST["timeHide"].",".$_POST["timeDue"].",".(isset($_POST["disabled"])&&$_POST["disabled"]==="on"?1:0).",\"\",".(isset($_POST["randomizeOrder"])&&$_POST["randomizeOrder"]==="on"?1:0).",".(isset($_POST["infiniteTries"])&&$_POST["infiniteTries"]==="on"?1:0).",\"".$user["key"]."\")"."</h2>";
+        log_error("new assignment","databse",$conn->error);
     } else {
         $col_id=$conn->insert_id;
         echo $col_id;
@@ -61,38 +60,32 @@ foreach ($_POST as $key => $value) {
     if(startsWith($key,"class_")){
         if($value==1) {
             if (!$result = $conn->query("SELECT * FROM `classes` WHERE `key`=" . str_replace("class_", "", $key))) {
-                echo "failed > ";
-                exit();
+                log_error("finding class","databse",$conn->error);
             }
             $previousAssignments = null;
             while ($row = $result->fetch_assoc()) {
                 $previousAssignments = ($row["assignmentKeys"] == null ? ";" : $row["assignmentKeys"]);
             }
             if ($previousAssignments === null) {
-                echo "failed to get target class";
-                exit();
+                log_error("get target class","databse","class key ".str_replace("class_", "", $key));
             }
             if (!$conn->query("UPDATE `classes` SET `assignmentKeys`=\"" . $previousAssignments . $col_id . ";\" WHERE `key`=" . str_replace("class_", "", $key))) {
-                echo "Failed";
-                exit();
+                log_error("update class","databse",$conn->error);
             }
         } else {
             if (!$result = $conn->query("SELECT * FROM `classes` WHERE `key`=" . str_replace("class_", "", $key))) {
-                echo "failed > ";
-                exit();
+                log_error("find class","databse","with key ".str_replace("class_", "", $key)." ",$conn->error);
             }
             $previousAssignments = null;
             while ($row = $result->fetch_assoc()) {
                 $previousAssignments = ($row["assignmentKeys"] == null ? ";" : $row["assignmentKeys"]);
             }
             if ($previousAssignments === null) {
-                echo "failed to get target class";
-                exit();
+                log_error("find class","databse","with key ".str_replace("class_", "", $key));
             }
             $previousAssignments=str_replace("$col_id;","",$previousAssignments);
             if (!$conn->query("UPDATE `classes` SET `assignmentKeys`=\"" . $previousAssignments . "\" WHERE `key`=" . str_replace("class_", "", $key))) {
-                echo "Failed";
-                exit();
+                log_error("update class","databse",$conn->error);
             }
         }
     }

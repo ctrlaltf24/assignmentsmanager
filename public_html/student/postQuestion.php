@@ -91,7 +91,7 @@ if(!$is_teacher||isset($demo)&&$demo){
             echo template_user_key($_GET['questionKey'],$conn,$user,$_GET["questionNumber"],$_GET["assignmentKey"],$randomize,$infinite_tries,$teacherKey,true,$answer,false);
         }
     } else {
-        echo "submit failed.";
+        log_error("submit","databse"," error ".$conn->error);
     }
 } else {
     if($correct){//correct answer
