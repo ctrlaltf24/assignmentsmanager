@@ -3,13 +3,15 @@
 if(isset($_COOKIE["demo"])&&$_COOKIE["demo"]){
     $demo=true;
 }
-session_start([
+if(!session_start([
     'cookie_secure'=>true,
     'cookie_httponly'=>true,
     'cookie_lifetime'=>0,
     'sid_length'=>128,
     'use_strict_mode'=>true
-]);
+])) {
+    log_error("Session failed","",$_COOKIE["PHPSESSID"]);
+}
 $conn=null;
 $user=null;
 require_once "logError.php";
