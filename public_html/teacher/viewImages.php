@@ -8,7 +8,7 @@ if(!$logged_in||!$is_teacher){
     echo "not logged in or not a teacher.<br>";
     exit();
 }
-$target_dir = "../assets/images/teachers/".(isset($demo)&&$demo?"demo/":"").$user["key"]."/";
+$target_dir = "../assets/images/teachers/".$user["key"]."/";
 
 
  ?>

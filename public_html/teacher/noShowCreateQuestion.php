@@ -53,7 +53,7 @@ if(!isset($_GET["parent-question"])){
             <script>$( document ).ready(function() {$("#question-form<?php echo $extraID?> input,#question-form<?php echo $extraID?> textarea").on("click keydown blur",function() {checkSave($(".question-form<?php echo $extraID?>"),$(this));});});</script>
             <input value="<?php echo $_GET["question_type"]?>" style="display: none;" name="questionType">
             <input class="question-order" name="subQuestions" style="display:none;">
-            <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
+            <div class="mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
                 <?php /*<div class="mdl-card__title mdl-grid" style="width: 100%;">
                     <h2 class="mdl-card__title-text mdl-cell mdl-cell--12-col">Create Question<div class="mdl-card__subtitle-text" style="padding-top: 16px;padding-left: 8px;"><?php echo $_GET["question_type"];?></div></h2>
                 </div>*/?>

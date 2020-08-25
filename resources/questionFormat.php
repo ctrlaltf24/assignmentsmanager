@@ -25,7 +25,7 @@ function format_text_tilde_codes($question,$vars,$teacher_id,$question_number=0,
                     if(in_array("/",str_split($args[1]))) {
                         $question = str_replace("~{" . $value . "}~", "</h2><img class=\" mdl-cell mdl-cell--12-col\" src=\"$args[1]\"><h2 class=\"mdl-card__title-text mdl-cell mdl-cell--12-col\">", $question, $val);
                     } else {
-                        $question = str_replace("~{" . $value . "}~", "</h2><img class=\" mdl-cell mdl-cell--12-col\" src=\"../assets/images/teachers/".(isset($_COOKIE["demo"])&&$_COOKIE["demo"]?"demo/":"")."$teacher_id/$args[1]\"><h2 class=\"mdl-card__title-text mdl-cell mdl-cell--12-col\">", $question, $val);
+                        $question = str_replace("~{" . $value . "}~", "</h2><img class=\" mdl-cell mdl-cell--12-col\" src=\"../assets/images/teachers/$teacher_id/$args[1]\"><h2 class=\"mdl-card__title-text mdl-cell mdl-cell--12-col\">", $question, $val);
                     }
                     break;
                 case "num"://~{num;name;start;end;increments}~

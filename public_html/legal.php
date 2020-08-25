@@ -29,13 +29,13 @@ echo template_header(true,$logged_in,$is_teacher);
                     <p>Essentially we collect only the information we need for purpose of providing the service, nothing more. What that exactly means is defined below.</p>
                     <br>
                     <h5>Information We Collect From Unregistered Users</h5>
-                    <ul class="demo-list-item mdl-list">
+                    <ul class="mdl-list">
                         <li class="mdl-list__item">
                             <span class="mdl-list__item-primary-content">Nothing. Just like it should be :)</span>
                         </li>
                     </ul>
                     <h5>Information We Collect From Registered Students</h5>
-                    <ul class="demo-list-item mdl-list">
+                    <ul class="mdl-list">
                         <li class="mdl-list__item">
                             <span class="mdl-list__item-primary-content">IP address (only in login cache, read more under information we store)</span>
                         </li>
@@ -56,7 +56,7 @@ echo template_header(true,$logged_in,$is_teacher);
                         </li>
                     </ul>
                     <h5>Information We Collect From Registered Teachers</h5>
-                    <ul class="demo-list-item mdl-list">
+                    <ul class="mdl-list">
                         <li class="mdl-list__item">
                             <span class="mdl-list__item-primary-content">IP address (only in login cache, read more under information we store)</span>
                         </li>
@@ -71,7 +71,7 @@ echo template_header(true,$logged_in,$is_teacher);
                         </li>
                     </ul>
                     <h5>Information We Share From Registered Students</h5>
-                    <ul class="demo-list-item mdl-list">
+                    <ul class="mdl-list">
                         <li class="mdl-list__item">
                             <span class="mdl-list__item-primary-content">We share your response to a question, time take and hints taken with solely the teacher you are enrolled under.</span>
                         </li>
@@ -86,7 +86,7 @@ echo template_header(true,$logged_in,$is_teacher);
                         </li>
                     </ul>
                     <h5>Information We Store Long Term</h5>
-                    <ul class="demo-list-item mdl-list">
+                    <ul class="mdl-list">
                         <li class="mdl-list__item">
                             <span class="mdl-list__item-primary-content">IP addresses are solely used to validate that you are the one who logged in. They are deleted from record after an hour.</span>
                         </li>

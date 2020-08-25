@@ -10,7 +10,7 @@ if(!$logged_in||!$is_teacher){
 if($showUI){echo "<div class=\"mdl-grid\" style=\"width:75%\"";}
 if(isset($_FILES["fileToUpload"])) {
     for ($i=0;$i<count($_FILES["fileToUpload"]["name"]);$i++){
-        $target_dir = "../assets/images/teachers/".(isset($demo)&&$demo?"demo/":"").$user["key"]."/";
+        $target_dir = "../assets/images/teachers/".$user["key"]."/";
         if(!is_dir($target_dir)) {
             mkdir($target_dir);
         }

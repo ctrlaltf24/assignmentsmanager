@@ -80,7 +80,7 @@ while($row=$result->fetch_assoc()){
 $result->close();
 $correct=(format_text_tilde_codes($answer,$vars,$_GET['teacherKey'])==format_text_tilde_codes($question["answer"],$vars,$_GET['teacherKey']))||$question["questionType"]=="Free Response Question";
 require_once '../../resources/score_manager.php';
-if(!$is_teacher||isset($demo)&&$demo){
+if(!$is_teacher){
     if($conn->query("INSERT INTO `responces`(`email`, `assignmentKey`, `question`, `questionAttempt`, `questionVariables`, `answer`, `hintsReached`, `timeElapsed`, `timeTaken`,`points`,`correct`) VALUES (\"".$user['email']."\",".$_GET['assignmentKey'].",".$_GET['questionKey'].",".$questionAttempt.",\""."$var_out"."\",\"".$answer."\",".$hintsReached.",".(isset($_GET["timeTaken"])&&is_numeric($_GET["timeTaken"])?$_GET["timeTaken"]:0).",".time().",".($correct?score_calculate($questionAttempt,$hintsReached,$question["points"]):0).",".($correct?1:0).")")){
         score_assignment_update($conn,$user["email"],$_GET['assignmentKey'],$infinite_tries);
         if($correct){//correct answer
