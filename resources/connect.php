@@ -3,7 +3,7 @@
 if (!isset($_COOKIE["TOKEN"])) { //Generate a new token if one isn't present
     $strong_crypto=true;
     $_COOKIE["TOKEN"]=bin2hex(openssl_random_pseudo_bytes(128,$strong_crypto));
-    setcookie("TOKEN",$_COOKIE["TOKEN"],array('secure'=>true,'httponly'=>true));
+    setcookie("TOKEN",$_COOKIE["TOKEN"],0,"/","",true,true);
 } else {
     $_COOKIE["TOKEN"] = htmlspecialchars($_COOKIE["TOKEN"]);
 }
