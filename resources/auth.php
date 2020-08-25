@@ -1,8 +1,8 @@
 <?php
 $is_teacher = false;
 $logged_in=false;
-$res = $conn->query("SELECT * FROM token WHERE token = \"" . session_id() . "\" LIMIT 1");
-$conn->query("UPDATE token SET `expire`=".(time()+8*60*60)." WHERE  token = \"" . session_id() . "\"");
+$res = $conn->query("SELECT * FROM token WHERE token = \"" . $_COOKIE["TOKEN"] . "\" LIMIT 1");
+$conn->query("UPDATE token SET `expire`=".(time()+31*24*60*60)." WHERE  token = \"" . $_COOKIE["TOKEN"] . "\"");
 while ($row = $res->fetch_assoc()) {
     $user = $row;
 }
@@ -33,14 +33,14 @@ if(isset($user["email"])&&$user["email"]!=""){
 } else {
     $logged_in = false;
     if(isset($demo)&&$demo){
-        $res = $conn->query("SELECT * FROM users WHERE email = \"" . session_id()."\"");
+        $res = $conn->query("SELECT * FROM users WHERE email = \"" . $_COOKIE["TOKEN"]."\"");
         while ($row = $res->fetch_assoc()) {
             $user=$row;
         }
         if(!isset($user)){
-            $conn->query("INSERT INTO `users`(`email`, `firstName`, `lastName`, `classKey`) VALUES (\"" . session_id() . "\",\"John\",\"Doe\",\";\")");
-            $conn->query("INSERT INTO `teachers` (`key`, `email`, `twoDaySchedule`, `scheduleName`, `classKey`) VALUES (".$conn->insert_id.", '".session_id()."', '1', '', '')");
-            $res = $conn->query("SELECT * FROM users WHERE email = \"" . session_id()."\"");
+            $conn->query("INSERT INTO `users`(`email`, `firstName`, `lastName`, `classKey`) VALUES (\"" . $_COOKIE["TOKEN"] . "\",\"John\",\"Doe\",\";\")");
+            $conn->query("INSERT INTO `teachers` (`key`, `email`, `twoDaySchedule`, `scheduleName`, `classKey`) VALUES (".$conn->insert_id.", '".$_COOKIE["TOKEN"]."', '1', '', '')");
+            $res = $conn->query("SELECT * FROM users WHERE email = \"" . $_COOKIE["TOKEN"]."\"");
             while ($row = $res->fetch_assoc()) {
                 $user=$row;
             }
