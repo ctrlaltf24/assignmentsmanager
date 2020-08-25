@@ -24,7 +24,7 @@ echo template_header(true,$logged_in,$is_teacher);
             <?php }  else { ?>
             	<a href="demo.php"><h3>Go back to regular, non-demo mode</h3></a>
             <?php } ?>
-            <a href="http://class.assignmentsmanager.com"><h3>Go to the class information page.</h3></a>
+            <a href="https://class.assignmentsmanager.com"><h3>Go to the class information page.</h3></a>
             <h5>Features will include:</h5>
             <ul class="demo-list-item mdl-list">
                 <li class="mdl-list__item">
