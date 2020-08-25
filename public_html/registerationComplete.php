@@ -11,7 +11,7 @@ echo template_header(true,$logged_in,$is_teacher);
         }
         if(isset($classKey)){
             if (!$conn->query("INSERT INTO `users`(`email`, `firstName`, `lastName`, `classKey`) VALUES (\"" . $user["email"] . "\",\"" . $_POST["first_name"] . "\",\"" . $_POST["last_name"] . "\",\";".$classKey.";\")")) {
-                echo "<h2 onload=\"window.location='index.php';\">Failure</h2>";
+                log_error("register user","databse",$conn->error);
             } else {
                 $col_id = $conn->insert_id;
                 echo "<h2 onload=\"window.location='index.php';\">Success</h2>";
