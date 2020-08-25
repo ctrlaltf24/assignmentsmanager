@@ -49,7 +49,7 @@ if(!isset($_GET["parent-question"])){
 }
 ?>
     <div class="mdl-cell mdl-cell--12-col">
-        <form id="question-form<?php echo $extraID?>" class="question-form<?php echo $extraID?>" action="<?php echo "http".(isset($_SERVER["HTTPS"])?"s":"")."://".$_SERVER['HTTP_HOST']."/teacher/postQuestion.php".(isset($questionKey)?"?key=".$questionKey:""); ?>" method="post">
+        <form id="question-form<?php echo $extraID?>" class="question-form<?php echo $extraID?>" action="<?php echo "https://".$_SERVER['HTTP_HOST']."/teacher/postQuestion.php".(isset($questionKey)?"?key=".$questionKey:""); ?>" method="post">
             <script>$( document ).ready(function() {$("#question-form<?php echo $extraID?> input,#question-form<?php echo $extraID?> textarea").on("click keydown blur",function() {checkSave($(".question-form<?php echo $extraID?>"),$(this));});});</script>
             <input value="<?php echo $_GET["question_type"]?>" style="display: none;" name="questionType">
             <input class="question-order" name="subQuestions" style="display:none;">
@@ -62,7 +62,7 @@ if(!isset($_GET["parent-question"])){
                         <div class="mdl-cell mdl-cell--12-col">
                             <?php
 								echo template_textArea("name$extraID","name","Question");
-							    $path = $_SERVER["REQUEST_SCHEME"]."://".$_SERVER['HTTP_HOST']."/";
+							    $path = "https://".$_SERVER['HTTP_HOST']."/";
                             ?>
                         </div>
                         <?php

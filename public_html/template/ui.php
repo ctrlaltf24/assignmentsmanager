@@ -5,7 +5,7 @@
 function template_header($showHeader=true,$logged_in=false,$is_teacher=false){
     echo "<html>
 <head>";
-    $path = ($_SERVER["HTTPS"]?"https":"http")."://".$_SERVER['HTTP_HOST']."/";
+    $path = "https://".$_SERVER['HTTP_HOST']."/";
     echo "
     <title>Assignments Manager".(isset($_COOKIE["demo"])&&$_COOKIE["demo"]?" Demo":"")."</title>
     <script src=\"".$path."js/jquery-3.2.1.min.js\"></script>
@@ -91,11 +91,11 @@ function get_header_items($logged_in=false,$is_teacher=false,$drawer=false){
                 if(is_numeric($key)){//file
                     if(!startsWith($value,"post")&&!startsWith($value,"noShow")){
                     	if(startsWith(strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1), "Create")){
-                    		$array["Create"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=(stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/teacher/".$value;
+                    		$array["Create"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=('https://').$_SERVER['HTTP_HOST']."/teacher/".$value;
                     	} else if (startsWith(strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1), "View")) {
-                    		$array["View"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=(stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/teacher/".$value;
+                    		$array["View"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=('https://').$_SERVER['HTTP_HOST']."/teacher/".$value;
                     	} else {
-                    		$array[strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=(stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/teacher/".$value;
+                    		$array[strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=('https://').$_SERVER['HTTP_HOST']."/teacher/".$value;
                     	}
                     }
                 } else {//folder create a dropdown
@@ -109,7 +109,7 @@ function get_header_items($logged_in=false,$is_teacher=false,$drawer=false){
         foreach (dirToArray($_SERVER['DOCUMENT_ROOT']."/student") as $key => $value){
             if(is_numeric($key)){//file
                 if(!startsWith($value,"post")&&!startsWith($value,"noShow")){
-                	$array["Student"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=(stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/student/".$value;
+                	$array["Student"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=('https://').$_SERVER['HTTP_HOST']."/student/".$value;
                 }
             } else {//folder create a dropdown
                 if(!(substr($key, -strlen("/head")) === "/head")){//if it isnt the head folder
