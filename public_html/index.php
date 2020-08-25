@@ -19,7 +19,7 @@ echo template_header(true,$logged_in,$is_teacher);
         <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--12-col-tablet mdl-cell--2-offset-desktop">
             <h2>Welcome to the site!</h2>
             <p>This assignment management system was created for teachers with teachers in mind. It is a work in progress, and strives to be a flexible solution for homework/quiz creation and answer reporting.</p>
-            <a href="https://class.assignmentsmanager.com"><h3>Go to the class information page.</h3></a>
+            <a href="http://class.assignmentsmanager.com"><h3>Go to the class information page.</h3></a>
             <h5>Features will include:</h5>
             <ul class="mdl-list">
                 <li class="mdl-list__item">
