@@ -11,7 +11,7 @@ echo template_header(true,$logged_in,$is_teacher);
         <form action="postAssignment.php<?php if(isset($_GET["key"])){echo "?key=".$_GET["key"];}?>" method="post" id="assignment-form" class="assignment-form">
             <script>$( document ).ready(function() {$("#assignment-form input").on("click keydown blur",function() {checkSave($(".assignment-form"),$(this));});});</script>
             <input class="question-order" name="questions" style="display:none;"></input>
-            <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
+            <div class="mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
                 <div class="mdl-card__title mdl-grid" style="width: 100%;">
                     <h2 class="mdl-card__title-text mdl-cell mdl-cell--12-col">Create Assignment</h2>
                 </div>
@@ -135,7 +135,7 @@ echo template_header(true,$logged_in,$is_teacher);
                 }
                 ?>
             </div><br />
-            <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
+            <div class="mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
                 <div class="mdl-card__title mdl-grid" style="width: 100%;">
                     <h2 class="mdl-card__title-text mdl-cell mdl-cell--12-col">Help</h2>
                 </div>

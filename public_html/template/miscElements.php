@@ -1,6 +1,6 @@
 <?php
 function template_list($items,$icon=null){
-    $output= "<ul class=\"demo-list-item mdl-list\">";
+    $output= "<ul class=\"mdl-list\">";
     foreach ($items as $value) {
         $output.="<li class=\"mdl-list__item\">
     <span class=\"mdl-list__item-primary-content\">
@@ -13,7 +13,7 @@ function template_list($items,$icon=null){
 }
 function template_card($title,$description="",$read_more="",$extraButton="",$extraDiv=""){
     return "
-<div class=\"demo-card-wide mdl-card mdl-shadow--2dp\" $extraDiv>
+<div class=\"mdl-card mdl-shadow--2dp\" $extraDiv>
   <div class=\"mdl-card__title mdl-grid\" style=\"width: 100%;\">
     <h2 class=\"mdl-card__title-text mdl-cell mdl-cell--12-col\">".$title."</h2>
   </div>
