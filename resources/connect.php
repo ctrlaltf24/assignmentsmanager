@@ -3,14 +3,12 @@
 if(isset($_COOKIE["demo"])&&$_COOKIE["demo"]){
     $demo=true;
 }
-if(!session_start([
-    'cookie_secure'=>true,
-    'cookie_httponly'=>true,
-    'cookie_lifetime'=>0,
-    'sid_length'=>128,
-    'use_strict_mode'=>true
-])) {
-    log_error("Session failed","",$_COOKIE["PHPSESSID"]);
+if (!isset($_COOKIE["TOKEN"])) { //Generate a new token if one isn't present
+    $strong_crypto=true;
+    $_COOKIE["TOKEN"]=bin2hex(openssl_random_pseudo_bytes(128,$strong_crypto));
+    setcookie("TOKEN",$_COOKIE["TOKEN"],array('secure'=>true,'httponly'=>true));
+} else {
+    $_COOKIE["TOKEN"] = htmlspecialchars($_COOKIE["TOKEN"]);
 }
 $conn=null;
 $user=null;
@@ -20,6 +18,7 @@ if(isset($demo)&&$demo){
 } else {
     require_once "connectRaw.php";
 }
+$_COOKIE["TOKEN"] = $conn->real_escape_string(htmlspecialchars($_COOKIE["TOKEN"])); // Ensure no token funny business
 require_once "auth.php";
 if(isset($demo)&&$demo){
     //do none of those checks
