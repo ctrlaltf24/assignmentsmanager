@@ -13,7 +13,7 @@ function getQuestionKeys($conn,$assignment_key,$is_teacher=false){
             $lastLength=count($question_keys)-1;//-1 is to make it trigger at least once
             while($lastLength<count($question_keys)){
                 foreach ($question_keys as $key=>$value) {
-                    if($value==""){
+                    if(trim($value)==""){
                         continue;
                     }
                     if ($result = $conn->query("SELECT `subQuestions` FROM questions WHERE `key`=" . $value . " LIMIT 1")) {
@@ -36,7 +36,7 @@ function getQuestionKeys($conn,$assignment_key,$is_teacher=false){
         }
     }
     foreach ($question_keys as $key => $value) {
-         if($value===""){
+         if(trim($value)==""){
               unset($question_keys[$key]);
          }
     }
