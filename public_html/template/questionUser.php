@@ -70,6 +70,15 @@ function template_user_question($name, $possibleAnswersArr,$answer,$units,$hints
         $output .= template_list($items);
     }
     $output .= "</div><div class=\"mdl-cell mdl-cell--12-col hints-div\">";
+    $hintsReached=0;
+    if(!$results = $conn->query("SELECT `hintsReached` FROM responces WHERE `question`=$question_key AND `assignmentKey`=$assignment_key LIMIT 1")){
+        log_error("failed to get responces","",$conn->error);
+    } else {
+        while ($row = $results->fetch_assoc()) {
+            $hintsReached=$row["hintsReached"];
+            break;
+        }
+    }
     if(!$results = $conn->query("SELECT `hints` FROM questions WHERE `key`=$question_key LIMIT 1")){
         log_error("failed to get questions","",$conn->error);
     }
@@ -83,8 +92,8 @@ function template_user_question($name, $possibleAnswersArr,$answer,$units,$hints
         $i = 0;
         $hintShown=false;
         foreach ($hints as $key => $value) {
-            if (!$showAnswer) {
-                $hintsHtml .= template_ripple_a("Hint " . ($i + 1), "style='float:left;' ".($i!=0?"disabled=true":"")." onclick=\"if(!$(this).is('[disabled]'))"."{var element=this;"."$.get('../fetch/hint.php?questionKey=$question_key&assignmentKey=$assignment_key&teacherKey=$teacherKey&number=$i',function(data)" . '{' . "$(element).parent().parent().find('.hints-div').children()[".($i)."].style.display='block';$(element).parent().parent().find('.hints-div').children()[".($i)."].after(data);$(element).attr('disabled','true');if($(element).parent().length>".($i-1)."){"."console.log(element);$($(element).parent().children()[".($i+1)."]).removeAttr('disabled');}});".'}'."\"");
+            if (!$showAnswer&&$i>=$hintsReached) {
+                $hintsHtml .= template_ripple_a("Hint " . ($i + 1), "style='float:left;' ".($i!=0?"disabled=true":"")." onclick=\"if(!$(this).is('[disabled]'))"."{var element=this;"."$.get('../fetch/hint.php?questionKey=$question_key&assignmentKey=$assignment_key&teacherKey=$teacherKey&number=$i',function(data)" . '{' . "$(element).parent().parent().find('.hints-div').children()[".($i)."].style.display='block';$(element).parent().parent().find('.hints-div').children()[".($i)."].after(data);$(element).attr('disabled','true');if($(element).parent().length>".($i-1)."){"."$($(element).parent().children()[".($i+1)."]).removeAttr('disabled');}});".'}'."\"");
                 $output .= "<br style=\"display: none;\">";
             } else {
                 if(!$hintShown){
@@ -102,23 +111,25 @@ function template_user_question($name, $possibleAnswersArr,$answer,$units,$hints
 }
 function template_user_key($question_key,$conn,$user,$questionNumber,$assignment_key,$randomize,$infinite_tries,$teacherKey,$showAnswer=false,$proposedAnswer="",$showSubQuestions=true){
     //check to see if the answer has already been submitted, if so re-call this function with correct arguments
-    if($proposedAnswer===""&&$results=$conn->query("SELECT `answer`,`correct` FROM `responces` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=$assignment_key AND `question`=$question_key ORDER BY `timeTaken` DESC LIMIT 1")){
-        $correct=false;
-        $answer="";
-        while($row=$results->fetch_assoc()){
-            $correct=$row["correct"];
-            $answer=$row["answer"];
-        }
-        $results->close();
-        if($answer!=""){
-            if($infinite_tries&&!$correct){
-                return template_user_key($question_key,$conn,$user,$questionNumber,$assignment_key,$randomize,$infinite_tries,$teacherKey,false,$answer,true);
-            } else {
-                return template_user_key($question_key,$conn,$user,$questionNumber,$assignment_key,$randomize,$infinite_tries,$teacherKey,true,$answer,true);
+    if($proposedAnswer===""){
+        if($results=$conn->query("SELECT `answer`,`correct` FROM `responces` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=$assignment_key AND `question`=$question_key ORDER BY `timeTaken` DESC LIMIT 1")){
+            $correct=false;
+            $answer="";
+            while($row=$results->fetch_assoc()){
+                $correct=$row["correct"];
+                $answer=$row["answer"];
             }
+            $results->close();
+            if($answer!=""){
+                if($infinite_tries&&!$correct){
+                    return template_user_key($question_key,$conn,$user,$questionNumber,$assignment_key,$randomize,$infinite_tries,$teacherKey,false,$answer,true);
+                } else {
+                    return template_user_key($question_key,$conn,$user,$questionNumber,$assignment_key,$randomize,$infinite_tries,$teacherKey,true,$answer,true);
+                }
+            }
+        } else {
+            log_error("failed to get responces","SELECT `answer`,`correct` FROM `responces` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=$assignment_key AND `question`=$question_key ORDER BY `timeTaken` DESC LIMIT 1",$conn->error);
         }
-    } else {
-        log_error("failed to get responces","",$conn->error);
     }
     if($results=$conn->query("SELECT * FROM questions WHERE `key`=$question_key LIMIT 1")) {
         $rowy=null;
@@ -165,8 +176,8 @@ function template_user_key($question_key,$conn,$user,$questionNumber,$assignment
                 if (is_numeric($value)) {
                     $subQuestionsHtml .= template_user_key($value, $conn,$user, $alphabet[$i], $assignment_key, $randomize,$infinite_tries,$teacherKey);
                     $i++;
-                } else {
-                    $subQuestionsHtml .= "ERRROR NOT A KEY.";
+                } else if ($value!="") {
+                    log_error("Not a valid subquestion","",$key.">".$value);
                 }
             }
             $subQuestionsHtml="<div style='margin-left:32px;'>".$subQuestionsHtml."</div>";

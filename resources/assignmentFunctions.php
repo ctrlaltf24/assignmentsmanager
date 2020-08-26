@@ -13,6 +13,9 @@ function getQuestionKeys($conn,$assignment_key,$is_teacher=false){
             $lastLength=count($question_keys)-1;//-1 is to make it trigger at least once
             while($lastLength<count($question_keys)){
                 foreach ($question_keys as $key=>$value) {
+                    if($value==""){
+                        continue;
+                    }
                     if ($result = $conn->query("SELECT `subQuestions` FROM questions WHERE `key`=" . $value . " LIMIT 1")) {
                         if ($row = $result->fetch_assoc()) {
                             $new_keys=explode(";",$row["subQuestions"]);
@@ -21,7 +24,7 @@ function getQuestionKeys($conn,$assignment_key,$is_teacher=false){
                             }
                         }
                     } else {
-                        log_error("failed to get questions","",$conn->error);
+                        log_error("failed to get questions","",$conn->error." ".$key." => ".$value);
                     }
                 }
                 $question_keys=array_unique($question_keys);
