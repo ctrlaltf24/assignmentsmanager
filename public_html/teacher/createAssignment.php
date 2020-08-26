@@ -31,7 +31,8 @@ echo template_header(true,$logged_in,$is_teacher);
                         <div class="mdl-cell mdl-cell--3-col">
                             <?php
                             echo template_textField("chapter-assignment","chapter","",true,'onclick="$(\'#chapter-assignment-dropdown\').click()"');
-                            echo template_options_sql_xml($conn,"SELECT chapter,subject FROM assignments GROUP BY chapter ORDER BY chapter","chapter-assignment","chapter",array("subject"=>"subject-assignment"));
+                            echo template_options_SQL($conn,"SELECT DISTINCT chapter FROM assignments WHERE `chapter`<> \"\" ORDER BY chapter","chapter-assignment","chapter");
+                           # echo template_options_sql_xml($conn,"SELECT chapter,subject FROM assignments GROUP BY chapter ORDER BY chapter","chapter-assignment","chapter",array("chapter"=>"chapter-assignment"));
                             ?>
                         </div>
                         <div class="mdl-cell mdl-cell--6-col">
@@ -56,7 +57,8 @@ echo template_header(true,$logged_in,$is_teacher);
                         <div class="mdl-cell mdl-cell--6-col">
                             <?php
                             echo template_textField("concept-assignment","concept","",false,'onclick="$(\'#concept-assignment-dropdown\').click()"');
-                            echo template_options_sql_xml($conn,"SELECT chapter,subject,concept FROM assignments GROUP BY concept ORDER BY concept","concept-assignment","concept",array("subject"=>"subject-assignment","chapter"=>"chapter-assignment"));
+                            echo template_options_SQL($conn,"SELECT DISTINCT chapter FROM assignments WHERE `chapter`<> \"\" ORDER BY chapter","chapter-assignment","chapter");
+                            #echo template_options_sql_xml($conn,"SELECT chapter,subject,concept FROM assignments GROUP BY concept ORDER BY concept","concept-assignment","concept",array("subject"=>"subject-assignment","chapter"=>"chapter-assignment"));
                             echo template_checkbox("disabled","Disable Assignment",false);
                             echo template_checkbox("randomizeOrder","Randomize Question Order");
                             echo template_checkbox("infiniteTries","Infinite Tries");

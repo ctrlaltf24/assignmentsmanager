@@ -66,7 +66,7 @@ function triggerSave(form) {
         	$(form).find(".question-sub-question-tooltip").hide();
         }
         //console.log(data);
-        $(form).find(".mdl-card__title-text")[0].innerHTML=$(form).find(".mdl-card__title-text")[0].innerHTML.replace(chips[1],"");
+        $(form).find(".mdl-card__title-text")[0].innerHTML=$(form).find(".mdl-card__title-text")[0].innerHTML.replace(chips[1],"").replace(chips[0],"");
         $(form).find(".mdl-card__title-text")[0].innerHTML+=chips[1];
     }).fail(function(data){
         $(form).find(".mdl-card__title-text")[0].innerHTML=$(form).find(".mdl-card__title-text")[0].innerHTML.replace(chips[0],"");

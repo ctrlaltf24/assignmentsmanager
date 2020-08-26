@@ -20,7 +20,7 @@ function getAssignmentClass($conn,$class){
         $results->close();
         $assignments=array();
         foreach ($keys as $key => $value) {
-            if($value===""){
+            if(trim($value)==""){
                 unset($keys[$key]);
             } else {
                 if($results=$conn->query("SELECT * FROM `assignments` WHERE `key`=$value")){
