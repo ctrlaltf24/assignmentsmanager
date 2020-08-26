@@ -1,7 +1,7 @@
 <?php
     require_once "miscElements.php";
     require_once "../../../staging_resources/questionFormat.php";
-function template_user_question($name, $possibleAnswersArr,$answer,$units,$hints,$level,$subject,$chapter,$concept,$topic,$points,$questionType,$subQuestionsArr,$conn,$questionNumber,$question_key,$assignment_key,$randomize,$showAnswer,$proposedAnswer,$vars,$teacherKey) {
+function template_user_question($name, $possibleAnswersArr,$answer,$units,$hints,$level,$subject,$chapter,$concept,$topic,$points,$questionType,$subQuestionsArr,$conn,$questionNumber,$question_key,$assignment_key,$randomize,$showAnswer,$proposedAnswer,$vars,$teacherKey,$hintsReached) {
     $output = "
         <div class=\"mdl-grid\">
             <div class=\"mdl-cell mdl-cell--12-col\">";
@@ -70,15 +70,6 @@ function template_user_question($name, $possibleAnswersArr,$answer,$units,$hints
         $output .= template_list($items);
     }
     $output .= "</div><div class=\"mdl-cell mdl-cell--12-col hints-div\">";
-    $hintsReached=0;
-    if(!$results = $conn->query("SELECT `hintsReached` FROM responces WHERE `question`=$question_key AND `assignmentKey`=$assignment_key LIMIT 1")){
-        log_error("failed to get responces","",$conn->error);
-    } else {
-        while ($row = $results->fetch_assoc()) {
-            $hintsReached=$row["hintsReached"];
-            break;
-        }
-    }
     if(!$results = $conn->query("SELECT `hints` FROM questions WHERE `key`=$question_key LIMIT 1")){
         log_error("failed to get questions","",$conn->error);
     }
@@ -91,10 +82,14 @@ function template_user_question($name, $possibleAnswersArr,$answer,$units,$hints
         }
         $i = 0;
         $hintShown=false;
+        $firstShown=true;
         foreach ($hints as $key => $value) {
-            if (!$showAnswer&&$i>=$hintsReached) {
-                $hintsHtml .= template_ripple_a("Hint " . ($i + 1), "style='float:left;' ".($i!=0?"disabled=true":"")." onclick=\"if(!$(this).is('[disabled]'))"."{var element=this;"."$.get('../fetch/hint.php?questionKey=$question_key&assignmentKey=$assignment_key&teacherKey=$teacherKey&number=$i',function(data)" . '{' . "$(element).parent().parent().find('.hints-div').children()[".($i)."].style.display='block';$(element).parent().parent().find('.hints-div').children()[".($i)."].after(data);$(element).attr('disabled','true');if($(element).parent().length>".($i-1)."){"."$($(element).parent().children()[".($i+1)."]).removeAttr('disabled');}});".'}'."\"");
+            if (!$showAnswer&&$i<=$hintsReached) {
+                $hintsHtml .= template_ripple_a("Hint " . ($i + 1), "style='float:left;' ".(!$firstShown?"disabled=true":"")." onclick=\"if(!$(this).is('[disabled]'))"."{var element=this;"."$.get('../fetch/hint.php?questionKey=$question_key&assignmentKey=$assignment_key&teacherKey=$teacherKey&number=$i',function(data)" . '{' . "$(element).parent().parent().find('.hints-div').children()[".($i)."].style.display='block';$(element).parent().parent().find('.hints-div').children()[".($i)."].after(data);$(element).attr('disabled','true');if($(element).parent().length>".($i-1)."){"."$($(element).parent().children()[".($i+1)."]).removeAttr('disabled');}});".'}'."\"");
                 $output .= "<br style=\"display: none;\">";
+                if($firstShown){
+                    $firstShown=false;
+                }
             } else {
                 if(!$hintShown){
                     $output.="<h4>Hints</h4>";
@@ -184,7 +179,16 @@ function template_user_key($question_key,$conn,$user,$questionNumber,$assignment
             if(!$showSubQuestions){
                 $subQuestionsHtml="";
             }
-            return template_user_question($rowy["name"],$possibleAnswersArr,$rowy["answer"],$rowy["units"],$rowy["hints"],$rowy["level"],$rowy["subject"],$rowy["chapter"],$rowy["concept"],$rowy["topic"],$rowy["points"],$rowy["questionType"],$subQuestionsArr,$conn,$questionNumber,$question_key,$assignment_key,$randomize,$showAnswer,$proposedAnswer,$vars,$teacherKey).$subQuestionsHtml;
+            $hintsReached=0;
+            if(!$results = $conn->query("SELECT `hintsReached` FROM responces WHERE `email`=\n".$user["email"]."\n `question`=$question_key AND `assignmentKey`=$assignment_key ORDER BY `hintsReached` DESC LIMIT 1")){
+                log_error("failed to get responces","",$conn->error);
+            } else {
+                while ($row = $results->fetch_assoc()) {
+                    $hintsReached=$row["hintsReached"];
+                    break;
+                }
+            }
+            return template_user_question($rowy["name"],$possibleAnswersArr,$rowy["answer"],$rowy["units"],$rowy["hints"],$rowy["level"],$rowy["subject"],$rowy["chapter"],$rowy["concept"],$rowy["topic"],$rowy["points"],$rowy["questionType"],$subQuestionsArr,$conn,$questionNumber,$question_key,$assignment_key,$randomize,$showAnswer,$proposedAnswer,$vars,$teacherKey,$hintsReached).$subQuestionsHtml;
         }
     } else {
         log_error("failed to get question","",$conn->error);
