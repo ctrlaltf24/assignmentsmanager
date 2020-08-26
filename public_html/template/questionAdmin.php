@@ -30,7 +30,9 @@ function template_admin_POST($conn){
     return "";
 }
 function template_admin_key($key,$conn){
-    $results=$conn->query("SELECT * FROM questions WHERE `key`=$key LIMIT 1");
+    if(!$results=$conn->query("SELECT * FROM questions WHERE `key`=$key LIMIT 1")){
+        log_error("failed to get questions","",$conn->error);
+    }
     if($results) {
         $results->data_seek(0);
         while ($row = $results->fetch_assoc()) {
@@ -40,6 +42,8 @@ function template_admin_key($key,$conn){
                     break;
             }
         }
+    } else {
+        log_error("failed to get questions","",$conn->error);
     }
     return "";
 }

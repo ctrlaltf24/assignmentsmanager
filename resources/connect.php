@@ -19,7 +19,9 @@ if(isset($logged_in)&&$logged_in) {
     } else {
         if (strstr($_SERVER["REQUEST_URI"], "teacher")) {//if the directory starts with teacher, bust them
                 if(strpos($_SERVER["REQUEST_URI"], "teacher")!=strpos($_SERVER["REQUEST_URI"], "teacherKey")){
-                    $conn->query("INSERT INTO nosy_students (`email`, `attemptedAcssesPage`, `time`) VALUES (\"" . $user["email"] . "\",\"" . urldecode($_SERVER["REQUEST_URI"]) . "\"," . time() . ")");
+                    if(!$conn->query("INSERT INTO nosy_students (`email`, `attemptedAcssesPage`, `time`) VALUES (\"" . $user["email"] . "\",\"" . urldecode($_SERVER["REQUEST_URI"]) . "\"," . time() . ")")){
+                        log_error("failed to insert into nosey students","",$conn->error);
+                    }
                     echo "<h1>Access Denied<br>If you are a teacher and not a nosy student who thought I wouldn't protect these pages, login <a href='../login.php'>here</a></h1>";
                     exit();
                 }

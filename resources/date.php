@@ -7,6 +7,7 @@ function convertDateTimeToCustom($conn,$date,$time,$scheduleName,$scheduleDays){
 		}
 		return -1;
 	} else {
+		log_error("failed to get schedule","",$conn->error);
 		return -1;
 	}
 }
@@ -19,6 +20,7 @@ function convertCustomTimeToUnix($conn,$customTime,$scheduleName,$scheduleDay,$s
 		}
 		return -1;
 	} else {
+		log_error("failed to get schedule","",$conn->error);
 		return -1;
 	}
 }

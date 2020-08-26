@@ -99,10 +99,12 @@ function format_text_tilde_codes($question,$vars,$teacher_id,$question_number=0,
             $var_out.=$key.";".$value."|";
         }
         if($var_out!="") {
-            $conn->query("DELETE FROM `variables` WHERE `email`=\"".$user["email"]."\" AND `question`=$question_number");
+            if(!$conn->query("DELETE FROM `variables` WHERE `email`=\"".$user["email"]."\" AND `question`=$question_number")){
+                log_error("delete variable","",$conn->error);
+            }
             if ($conn->query("INSERT INTO `variables`(`email`, `question`, `time`, `variables`) VALUES (\"" . $user["email"] . "\"," . $question_number . "," . time() . ",\"" . $var_out . "\")")) {
             } else {
-                echo "submit failed.";
+                log_error("submit variable","",$conn->error);
             }
         }
         return array($question, $vars);

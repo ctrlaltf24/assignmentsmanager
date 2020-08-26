@@ -41,12 +41,15 @@ echo template_header(true, $logged_in, $is_teacher);?>
 <?php
 echo template_footer();
 /*
+Add log_error check if this is uncommented
 $results = $conn->query("SELECT * FROM assignments WHERE `teacherKey`=".$user["key"]." ORDER BY `timeAccessible`,`chapter` DESC");
 if ($results) {
 $results->data_seek(0);
 $data=array();
 while ($row = $results->fetch_assoc()) {
 array_push($data,array($row["chapter"],$row["name"],$row["timeAccessible"],template_ripple_a("Edit","href=createAssignment.php?key=".$row["key"])));
+} else {
+    log_error("failed to get sql","",$conn->error);
 }
 echo template_table($data,array("Chapter","Name","Time Accessible","Edit"));
 echo "<script>$('.mdl-table').css()</script>";

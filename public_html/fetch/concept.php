@@ -5,13 +5,17 @@ if(!isset($chapter)){
     $chapter=$_GET["chapter"];
 }
 $concepts = array();
-$results=$conn->query("SELECT DISTINCT concept FROM assignments WHERE chapter=\"".$chapter."\"");
+if(!$results=$conn->query("SELECT DISTINCT concept FROM assignments WHERE chapter=\"".$chapter."\"")){
+    log_error("failed to get concepts","",$conn->error);
+}
 $results->data_seek(0);
 while ($row = $results->fetch_assoc()) {
     array_push($concepts,$row["concept"]);
 }
 $results->close();
-$results=$conn->query("SELECT DISTINCT concept FROM questions WHERE chapter=\"".$chapter."\"");
+if(!$results=$conn->query("SELECT DISTINCT concept FROM questions WHERE chapter=\"".$chapter."\"")){
+    log_error("failed to get concepts","",$conn->error);
+}
 $results->data_seek(0);
 while ($row = $results->fetch_assoc()) {
     array_push($concepts,$row["concept"]);

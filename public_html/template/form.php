@@ -150,7 +150,9 @@ function template_textArea($id,$name= "",$display="",$rows=2,$required=true,$ext
  */
 function template_options_SQL($conn, $query, $idInput, $rowName, $moreRows=array(), $extraInput="", $attrSave=array()){
     $sqlinput ='';
-    $results=$conn->query($query);
+    if(!$results=$conn->query($query)){
+		log_error("failed to get sql","",$conn->error);
+	}
     if($results) {
         $results->data_seek(0);
         while ($row = $results->fetch_assoc()) {
@@ -167,12 +169,14 @@ function template_options_SQL($conn, $query, $idInput, $rowName, $moreRows=array
         }
         return "<ul class=\"mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect\" for=\"" . $idInput . "-main\" id=\"" . $idInput . "-dropdown\">" . $sqlinput . "</ul>";
     } else {
-        return "ERROR";
+		log_error("failed to get sql","",$conn->error);
     }
 }
 function template_options_sql_xml($conn, $query, $idInput, $rowName, $moreRows=array(), $extraInput="", $attrSave=array()){
     $XML ='<xml>';
-    $results=$conn->query($query);
+    if(!$results=$conn->query($query)){
+		log_error("failed to get sql","",$conn->error);
+	}
     if($results) {
         $results->data_seek(0);
         while ($row = $results->fetch_assoc()) {
@@ -185,7 +189,7 @@ function template_options_sql_xml($conn, $query, $idInput, $rowName, $moreRows=a
         $XML.='</xml>';
         return template_options_xml($XML,$idInput);
     } else {
-        return "ERROR";
+		log_error("failed to get sql","",$conn->error);
     }
 }
 function template_options_xml($XML, $idInput){

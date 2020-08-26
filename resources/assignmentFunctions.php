@@ -1,8 +1,9 @@
 <?php
 function getQuestionKeys($conn,$assignment_key,$is_teacher=false){
     $question_keys=array();
-    $result=$conn->query("SELECT `questions`,`key` FROM `assignments` WHERE ".($is_teacher?"":"`disabled`=0 AND ")."`key`=".$assignment_key." LIMIT 1");
-    if($result){
+    if(!$result=$conn->query("SELECT `questions`,`key` FROM `assignments` WHERE ".($is_teacher?"":"`disabled`=0 AND ")."`key`=".$assignment_key." LIMIT 1")){
+        log_error("failed to get assignments","",$conn->error);
+    } else {
         while(!is_bool($result)&&$row = $result->fetch_assoc()){
             $new_keys=explode(";",$row["questions"]);
             foreach ($new_keys as $key=>$value){
@@ -19,6 +20,8 @@ function getQuestionKeys($conn,$assignment_key,$is_teacher=false){
                                 array_push($question_keys,$value);
                             }
                         }
+                    } else {
+                        log_error("failed to get questions","",$conn->error);
                     }
                 }
                 $question_keys=array_unique($question_keys);
@@ -28,9 +31,6 @@ function getQuestionKeys($conn,$assignment_key,$is_teacher=false){
         if(!is_bool($result)){
         	$result->close();
         }
-        //this is a wierd error
-    } else {
-    	echo "That isn't an assignment key.";
     }
     foreach ($question_keys as $key => $value) {
          if($value===""){
@@ -43,11 +43,13 @@ function getMaxPoints($conn,$assignment_key,$is_teacher=false){
      $questions=getQuestionKeys($conn,$assignment_key,$is_teacher);
      $totalPoints=0;
      foreach ($questions as $key => $value) {
-          if($results=$conn->query("SELECT `points` FROM `questions` WHERE `key`=$value")){
-               while($row=$results->fetch_assoc()){
-                    $totalPoints+=$row["points"];
-               }
-          }
+        if($results=$conn->query("SELECT `points` FROM `questions` WHERE `key`=$value")){
+            while($row=$results->fetch_assoc()){
+                $totalPoints+=$row["points"];
+            }
+        } else {
+            log_error("failed to get sql","",$conn->error);
+        }
      }
      return $totalPoints;
 }
