@@ -92,7 +92,7 @@ function template_user_question($name, $possibleAnswersArr,$answer,$units,$hints
         $i = 0;
         $hintShown=false;
         foreach ($hints as $key => $value) {
-            if (!$showAnswer&&$i>=$hintsReached) {
+            if (!$showAnswer&&$i<=$hintsReached) {
                 $hintsHtml .= template_ripple_a("Hint " . ($i + 1), "style='float:left;' ".($i!=0?"disabled=true":"")." onclick=\"if(!$(this).is('[disabled]'))"."{var element=this;"."$.get('../fetch/hint.php?questionKey=$question_key&assignmentKey=$assignment_key&teacherKey=$teacherKey&number=$i',function(data)" . '{' . "$(element).parent().parent().find('.hints-div').children()[".($i)."].style.display='block';$(element).parent().parent().find('.hints-div').children()[".($i)."].after(data);$(element).attr('disabled','true');if($(element).parent().length>".($i-1)."){"."$($(element).parent().children()[".($i+1)."]).removeAttr('disabled');}});".'}'."\"");
                 $output .= "<br style=\"display: none;\">";
             } else {
