@@ -1,5 +1,5 @@
 <?php
-require_once "../../resources/connect.php";
+require_once "../../../staging_resources/connect.php";
 require_once "../template/form.php";
 if(!isset($subject)){
     $subject=$_GET["subject"];

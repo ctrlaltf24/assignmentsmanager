@@ -1,8 +1,8 @@
 <?php
 require_once "../template/questionUser.php";
-require_once "../../resources/authFunctions.php";
-require_once "../../resources/connect.php";
-require_once "../../resources/questionFormat.php";
+require_once "../../../staging_resources/authFunctions.php";
+require_once "../../../staging_resources/connect.php";
+require_once "../../../staging_resources/questionFormat.php";
 //TODO: fix permission check
 if(!$is_teacher){
     if(!questionInAssignment($_GET['assignmentKey'],$_GET['questionKey'],$conn,$is_teacher)){
@@ -101,7 +101,7 @@ while($row=$result->fetch_assoc()){
 }
 $result->close();
 $correct=(format_text_tilde_codes($answer,$vars,$_GET['teacherKey'])==format_text_tilde_codes($question["answer"],$vars,$_GET['teacherKey']))||$question["questionType"]=="Free Response Question";
-require_once '../../resources/score_manager.php';
+require_once '../../../staging_resources/score_manager.php';
 if(!$is_teacher){
     if($conn->query("INSERT INTO `responces`(`email`, `assignmentKey`, `question`, `questionAttempt`, `questionVariables`, `answer`, `hintsReached`, `timeElapsed`, `timeTaken`,`points`,`correct`) VALUES (\"".$user['email']."\",".$_GET['assignmentKey'].",".$_GET['questionKey'].",".$questionAttempt.",\""."$var_out"."\",\"".$answer."\",".$hintsReached.",".(isset($_GET["timeTaken"])&&is_numeric($_GET["timeTaken"])?$_GET["timeTaken"]:0).",".time().",".($correct?score_calculate($questionAttempt,$hintsReached,$question["points"]):0).",".($correct?1:0).")")){
         score_assignment_update($conn,$user["email"],$_GET['assignmentKey'],$infinite_tries);

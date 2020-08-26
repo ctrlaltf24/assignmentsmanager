@@ -1,10 +1,10 @@
 <?php
 require_once "../template/ui.php";
-require_once "../../resources/connect.php";
+require_once "../../../staging_resources/connect.php";
 require_once "../template/miscElements.php";
 require_once "../template/form.php";
-require_once '../../resources/score_manager.php';
-require_once '../../resources/sqlArray.php';
+require_once '../../../staging_resources/score_manager.php';
+require_once '../../../staging_resources/sqlArray.php';
 echo template_header(true, $logged_in, $is_teacher);?>
     <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--12-col-tablet mdl-cell--1-offset-desktop">
@@ -65,7 +65,7 @@ echo template_header(true, $logged_in, $is_teacher);?>
         }
         });</script>
     <?php
-    require_once "../../resources/classFunctions.php";
+    require_once "../../../staging_resources/classFunctions.php";
     $header=array("Student Name"=>"Student Name","Average"=>"Average");
     $max_points=array();
     $dataPoints=array();
@@ -76,7 +76,7 @@ echo template_header(true, $logged_in, $is_teacher);?>
     foreach (sql_to_array($conn,"SELECT `key` FROM `classes` WHERE `year`=".(date("m")>=9?date("Y"):date("Y")-1)." AND `teacherKey`=".$user["key"]." ORDER BY `key` DESC","key") as $irrelivant => $classKey) {
     	$users=getStudentsClass($conn,$classKey);
         $assignments=getAssignmentClass($conn,$classKey);
-        require_once "../../resources/assignmentFunctions.php";
+        require_once "../../../staging_resources/assignmentFunctions.php";
         foreach ($assignments as $key => $value) {
             $max_points[$key]=getMaxPoints($conn,$key,$is_teacher);
             if($results=$conn->query("SELECT subject,chapter,concept FROM assignments WHERE `key`=".$key." LIMIT 1")){

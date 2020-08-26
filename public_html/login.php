@@ -1,7 +1,7 @@
 <?php
 include "template/ui.php";
-require_once "../resources/connect.php";
-require_once "../resources/startsWithEndsWith.php";
+require_once "../../staging_resources/connect.php";
+require_once "../../staging_resources/startsWithEndsWith.php";
 //template header put in later
 //$domain = ($_SERVER['HTTP_HOST'] != 'localhost'&&!endsWith($_SERVER['HTTP_HOST'],".localhost")) ? $_SERVER['HTTP_HOST'] : false;
 //setcookie("token","asfdasfafajdaesf098sudlj2mqcau5 30126tpio0ju89sflkajlskdjlads",(time()+60*60*1000),"/",$domain,($domain!=false?true:false),true);
@@ -24,7 +24,7 @@ if($result = $conn->query("SELECT * FROM token WHERE token = \"".$_COOKIE["TOKEN
 // Make sure to add a check if this is uncommented
 //$conn->query("INSERT INTO token VALUES (\"".$conn->real_escape_string($_COOKIE['token'])."\",\"".$conn->real_escape_string("shaabanl@hsd.k12.or.us"/*figure out how to get email here*/)."\",".(time()+60*60*1000).",\"".$_SERVER['REMOTE_ADDR']."\")");
 
-require_once "../resources/gClient.php";
+require_once "../../staging_resources/gClient.php";
 $loginUrl=$gClient->createAuthUrl();
 echo "<a href='$loginUrl'>Login with google</a>";
 ?>

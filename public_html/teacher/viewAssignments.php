@@ -1,24 +1,24 @@
 <?php
 require_once "../template/ui.php";
-require_once "../../resources/connect.php";
+require_once "../../../staging_resources/connect.php";
 require_once "../template/miscElements.php";
 require_once "../template/form.php";
-require_once '../../resources/score_manager.php';
-require_once '../../resources/sqlArray.php';
+require_once '../../../staging_resources/score_manager.php';
+require_once '../../../staging_resources/sqlArray.php';
 echo template_header(true, $logged_in, $is_teacher);?>
     <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--12-col-tablet mdl-cell--1-offset-desktop">
             <?php
             echo template_filters($conn,$user);
-            require_once "../../resources/classFunctions.php";
+            require_once "../../../staging_resources/classFunctions.php";
             $header=array("Student Name"=>"Student Name");
             $max_points=array();
             $data=array();
             $HTMLClasses=array();
             $HTMLHeaderClasses=array();
-            require_once "../../resources/assignmentFunctions.php";
+            require_once "../../../staging_resources/assignmentFunctions.php";
             $header=array("Checkbox"=>"","Chapter"=>"Chapter","Name"=>"Name","Time Accessible"=>"Time Accessible","Time Due"=>"Time Due","Time Hide"=>"Time Hide","Edit"=>"Edit","Responces"=>"Responces");
-            require_once "../../resources/assignmentFunctions.php";
+            require_once "../../../staging_resources/assignmentFunctions.php";
             foreach (sql_to_array($conn,"SELECT * FROM assignments WHERE `teacherKey`=".$user["key"]." ORDER BY `key` DESC") as $row) {
                 $data[$row["key"]]["Checkbox"]=template_checkbox($row["key"]."-checkbox","",false);
                 $data[$row["key"]]["Chapter"]=$row["chapter"];

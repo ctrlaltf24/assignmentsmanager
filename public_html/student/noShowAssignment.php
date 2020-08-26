@@ -1,12 +1,12 @@
 <?php
 require_once "../template/ui.php";
-require_once "../../resources/connect.php";
+require_once "../../../staging_resources/connect.php";
 echo template_header(true, $logged_in, $is_teacher);
 
 //get assignemnt key and display questions one by one
 if(isset($_GET["key"])){
     $save_results = true;
-    require_once "../../resources/authFunctions.php";
+    require_once "../../../staging_resources/authFunctions.php";
     echo "<div class=\"mdl-grid\">
             <div class=\"mdl-cell mdl-cell--8-col-desktop mdl-cell--12-col-tablet mdl-cell--2-offset-desktop\">";
     if(canViewAssignment($_GET["key"],$is_teacher,$conn,$user)){

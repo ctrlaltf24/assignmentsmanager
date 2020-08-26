@@ -1,6 +1,6 @@
 <?php
 include "../template/ui.php";
-require_once "../../resources/connect.php";
+require_once "../../../staging_resources/connect.php";
 echo template_header(true,$logged_in,$is_teacher);
 //TODO: ADD SOME SORT OF SCRIPT TO MAKE SURE ALL INPUTS ARE LEGIT HERE OR IN createClass
 

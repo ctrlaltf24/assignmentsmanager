@@ -1,6 +1,6 @@
 <?php
     require_once "miscElements.php";
-    require_once "../../resources/questionFormat.php";
+    require_once "../../../staging_resources/questionFormat.php";
 function template_user_question($name, $possibleAnswersArr,$answer,$units,$hints,$level,$subject,$chapter,$concept,$topic,$points,$questionType,$subQuestionsArr,$conn,$questionNumber,$question_key,$assignment_key,$randomize,$showAnswer,$proposedAnswer,$vars,$teacherKey) {
     $output = "
         <div class=\"mdl-grid\">

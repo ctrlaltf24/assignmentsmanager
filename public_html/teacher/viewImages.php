@@ -1,7 +1,7 @@
 <?php
 require_once '../template/ui.php';
 require_once '../template/miscElements.php';
-require_once "../../resources/connect.php";
+require_once "../../../staging_resources/connect.php";
 $showUI = isset($_GET["hideUI"])&&!$_GET["hideUI"]||!isset($_GET["hideUI"]);
 echo template_header($showUI,$logged_in,$is_teacher);
 if(!$logged_in||!$is_teacher){

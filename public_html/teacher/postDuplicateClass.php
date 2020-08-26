@@ -1,6 +1,6 @@
 <?php
-require_once "../../resources/connect.php";
-require_once "../../resources/duplicationUtils.php";
+require_once "../../../staging_resources/connect.php";
+require_once "../../../staging_resources/duplicationUtils.php";
 require_once "../template/ui.php";
 $showUI = isset($_GET["hideUI"])&&!$_GET["hideUI"]||!isset($_GET["hideUI"]);
 echo template_header($showUI,$logged_in,$is_teacher);

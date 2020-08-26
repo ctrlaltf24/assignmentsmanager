@@ -1,5 +1,5 @@
 <?php
-require_once "../../resources/connect.php";
+require_once "../../../staging_resources/connect.php";
 require_once "../template/form.php";
 if(!isset($questionKey)) {
     if (isset($_GET["questionKey"])) {
@@ -32,8 +32,8 @@ if(!isset($hint_number)){
 if(!$logged_in) {
     log_error("Login. I see you found this address and figured out how the hints were retrieved.","");
 }
-require_once "../../resources/authFunctions.php";
-require_once "../../resources/questionFormat.php";
+require_once "../../../staging_resources/authFunctions.php";
+require_once "../../../staging_resources/questionFormat.php";
 if(questionInAssignment($assignmentKey,$questionKey,$conn,$is_teacher)) {
     if(canViewAssignment($assignmentKey,$is_teacher,$conn,$user)) {
         if(!$results = $conn->query("SELECT `hints` FROM questions WHERE `key`=$questionKey LIMIT 1")){

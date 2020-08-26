@@ -1,7 +1,7 @@
 <?php
 require_once "template/ui.php";
 require_once "template/form.php";
-require_once "../resources/connect.php";
+require_once "../../staging_resources/connect.php";
 echo template_header(true, $logged_in, $is_teacher);
 $found=false;
 if ($result=$conn->query("SELECT * FROM users WHERE email = \"" . $user["email"] . "\"")) {

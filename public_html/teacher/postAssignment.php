@@ -1,8 +1,8 @@
 <?php
 require_once "../template/ui.php";
-require_once "../../resources/connect.php";
-require_once "../../resources/startsWithEndsWith.php";
-require_once "../../resources/date.php";
+require_once "../../../staging_resources/connect.php";
+require_once "../../../staging_resources/startsWithEndsWith.php";
+require_once "../../../staging_resources/date.php";
 
 $_POST["timeAccessible"]=-1;
 $_POST["timeHide"]=-1;

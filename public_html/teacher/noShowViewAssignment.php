@@ -1,9 +1,9 @@
 <?php
 //TODO: NOTE THIS ASSUMES ASSIGNMENTS ARE UNIQUE TO TEACHERS
 require_once "../template/ui.php";
-require_once "../../resources/connect.php";
-require_once "../../resources/assignmentFunctions.php";
-require_once "../../resources/questionFormat.php";
+require_once "../../../staging_resources/connect.php";
+require_once "../../../staging_resources/assignmentFunctions.php";
+require_once "../../../staging_resources/questionFormat.php";
 require_once "../template/miscElements.php";
 require_once "../template/form.php";
 if(!isset($_GET["key"])){

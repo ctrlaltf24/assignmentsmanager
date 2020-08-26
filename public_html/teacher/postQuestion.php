@@ -1,6 +1,6 @@
 <?php
 include "../template/ui.php";
-require_once "../../resources/connect.php";
+require_once "../../../staging_resources/connect.php";
 require_once "../template/questionAdmin.php";
 require_once "../template/miscElements.php";
 if(isset($_GET["key"])){

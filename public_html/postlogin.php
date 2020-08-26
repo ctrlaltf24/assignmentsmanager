@@ -1,6 +1,6 @@
 <?php
-require "../resources/startsWithEndsWith.php";
-require_once "../resources/gClient.php";
+require "../../staging_resources/startsWithEndsWith.php";
+require_once "../../staging_resources/gClient.php";
 
 if(isset($_GET['code'])){
     $token=$gClient->fetchAccessTokenWithAuthCode($_GET['code']);
@@ -10,8 +10,8 @@ $oAuth = new Google_Service_Oauth2($gClient);
 $userData = $oAuth->userinfo_v2_me->get();
 //echo $userData["verifiedEmail"];
 if($userData["verifiedEmail"]===true){
-    require_once "../resources/connect.php";
-    require_once "../resources/connectAdmin.php";
+    require_once "../../staging_resources/connect.php";
+    require_once "../../staging_resources/connectAdmin.php";
     if(!$conn->query("DELETE FROM `token` WHERE `expire`<".time())){
         log_error("failed to delete tokens","",$conn->error);
     }

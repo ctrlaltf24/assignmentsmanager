@@ -1,5 +1,5 @@
 <?php
-require_once '../../resources/sqlArray.php';
+require_once '../../../staging_resources/sqlArray.php';
 function duplicate_class($conn,$user,$classID) {
     foreach (sql_to_array($conn,"SELECT * FROM classes WHERE `key`=".$_POST["class"]." LIMIT 1") as $oldClassRow) {
         // generate a new unique class code

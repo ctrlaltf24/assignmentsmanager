@@ -1,6 +1,6 @@
 <?php
 include "template/ui.php";
-include "../resources/connect.php";
+include "../../staging_resources/connect.php";
 echo template_header(true,$logged_in,$is_teacher);
 ?>
 

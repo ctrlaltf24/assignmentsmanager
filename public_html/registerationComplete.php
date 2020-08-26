@@ -1,6 +1,6 @@
 <?php
 require_once "template/ui.php";
-require_once "../resources/connect.php";
+require_once "../../staging_resources/connect.php";
 echo template_header(true,$logged_in,$is_teacher);
 //if($logged_in) {
     if(isset($_POST["first_name"])&&isset($_POST["last_name"])&&isset($_POST["class_code"])) {

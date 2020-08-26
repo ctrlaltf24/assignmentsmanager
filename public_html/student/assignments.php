@@ -1,7 +1,7 @@
 <?php
 require_once "../template/ui.php";
-require_once "../../resources/connect.php";
-require_once "../../resources/assignmentFunctions.php";
+require_once "../../../staging_resources/connect.php";
+require_once "../../../staging_resources/assignmentFunctions.php";
 require_once "../template/miscElements.php";
 echo template_header(true, $logged_in, $is_teacher);
 $classes = explode(";",$user["classKey"]);
