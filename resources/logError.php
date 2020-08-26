@@ -1,5 +1,5 @@
 <?php
-ini_set('error_log', $_SERVER['DOCUMENT_ROOT']."/../../error_log.txt");
+ini_set('error_log', $_SERVER['DOCUMENT_ROOT']."/../../staging_error_log.txt");
 function log_error($human_readable,$admin_readable="",$data="") {
     $id=time().hash("sha256",$human_readable.$admin_readable.$data.time());
     $e=new Exception();
