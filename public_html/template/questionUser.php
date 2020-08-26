@@ -102,23 +102,25 @@ function template_user_question($name, $possibleAnswersArr,$answer,$units,$hints
 }
 function template_user_key($question_key,$conn,$user,$questionNumber,$assignment_key,$randomize,$infinite_tries,$teacherKey,$showAnswer=false,$proposedAnswer="",$showSubQuestions=true){
     //check to see if the answer has already been submitted, if so re-call this function with correct arguments
-    if($proposedAnswer===""&&$results=$conn->query("SELECT `answer`,`correct` FROM `responces` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=$assignment_key AND `question`=$question_key ORDER BY `timeTaken` DESC LIMIT 1")){
-        $correct=false;
-        $answer="";
-        while($row=$results->fetch_assoc()){
-            $correct=$row["correct"];
-            $answer=$row["answer"];
-        }
-        $results->close();
-        if($answer!=""){
-            if($infinite_tries&&!$correct){
-                return template_user_key($question_key,$conn,$user,$questionNumber,$assignment_key,$randomize,$infinite_tries,$teacherKey,false,$answer,true);
-            } else {
-                return template_user_key($question_key,$conn,$user,$questionNumber,$assignment_key,$randomize,$infinite_tries,$teacherKey,true,$answer,true);
+    if($proposedAnswer===""){
+        if($results=$conn->query("SELECT `answer`,`correct` FROM `responces` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=$assignment_key AND `question`=$question_key ORDER BY `timeTaken` DESC LIMIT 1")){
+            $correct=false;
+            $answer="";
+            while($row=$results->fetch_assoc()){
+                $correct=$row["correct"];
+                $answer=$row["answer"];
             }
+            $results->close();
+            if($answer!=""){
+                if($infinite_tries&&!$correct){
+                    return template_user_key($question_key,$conn,$user,$questionNumber,$assignment_key,$randomize,$infinite_tries,$teacherKey,false,$answer,true);
+                } else {
+                    return template_user_key($question_key,$conn,$user,$questionNumber,$assignment_key,$randomize,$infinite_tries,$teacherKey,true,$answer,true);
+                }
+            }
+        } else {
+            log_error("failed to get responces","SELECT `answer`,`correct` FROM `responces` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=$assignment_key AND `question`=$question_key ORDER BY `timeTaken` DESC LIMIT 1",$conn->error);
         }
-    } else {
-        log_error("failed to get responces","",$conn->error);
     }
     if($results=$conn->query("SELECT * FROM questions WHERE `key`=$question_key LIMIT 1")) {
         $rowy=null;
