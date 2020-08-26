@@ -167,8 +167,8 @@ function template_user_key($question_key,$conn,$user,$questionNumber,$assignment
                 if (is_numeric($value)) {
                     $subQuestionsHtml .= template_user_key($value, $conn,$user, $alphabet[$i], $assignment_key, $randomize,$infinite_tries,$teacherKey);
                     $i++;
-                } else {
-                    $subQuestionsHtml .= "ERRROR NOT A KEY.";
+                } else if ($value!="") {
+                    log_error("Not a valid subquestion","",$key.">".$value);
                 }
             }
             $subQuestionsHtml="<div style='margin-left:32px;'>".$subQuestionsHtml."</div>";
