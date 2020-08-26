@@ -83,7 +83,7 @@ function dirToArray($dir) {
  * This is used as it needs to be done twice
  */
 function get_header_items($logged_in=false,$is_teacher=false,$drawer=false){
-    require_once "../../../staging_resources/startsWithEndsWith.php";
+    require_once $_SERVER['DOCUMENT_ROOT']."/../../staging_resources/startsWithEndsWith.php";
     $array=array();
     if($logged_in) {
         if ($is_teacher) {
