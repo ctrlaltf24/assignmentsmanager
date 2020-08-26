@@ -12,6 +12,6 @@ function sql_to_array($conn,$sql,$rowName=null){
         }
         return $output;
     } else {
-        echo -1;
+        log_error("failed to get sql","",$conn->error);
     }
 }

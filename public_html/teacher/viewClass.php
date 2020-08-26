@@ -83,6 +83,8 @@ echo template_header(true, $logged_in, $is_teacher);?>
                 while($row=$results->fetch_assoc()){
                     $HTMLHeaderClasses[$value["key"]]="filter-subject-".stripFieldNames($row["subject"])." "."filter-chapter-".stripFieldNames($row["chapter"])." "."filter-concept-".stripFieldNames($row["concept"]);
                 }
+            } else {
+                log_error("failed to get assignments","",$conn->error);
             }
             $header[$value["key"]]=$value["name"]." (".$max_points[$key]." Points)<span style=display:none class=col-total-points>".$max_points[$key]."</span>";
         }
@@ -111,6 +113,8 @@ echo template_header(true, $logged_in, $is_teacher);?>
                         $sums[$valueA["key"]]["count"]++;
                     }
                     $results->close();
+                } else {
+                    log_error("failed to get assignment cache for user","",$conn->error);
                 }
             }
         }

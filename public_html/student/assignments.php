@@ -29,11 +29,11 @@ foreach ($classes as $key=>$value) {
                                 }
                             }
                             if(!$found){//the assignment has not been started that is why the user_assignments failed.
-                                 if($results = $conn->query("SELECT `name`, `subject`, `chapter`, `concept`, `timeAccessible`, `timeHide`, `timeDue`, `disabled`,`key` FROM `assignments` WHERE `key`=" . $value2.($is_teacher?"":" AND `disabled`=0")." LIMIT 1")) {
+                                if($results = $conn->query("SELECT `name`, `subject`, `chapter`, `concept`, `timeAccessible`, `timeHide`, `timeDue`, `disabled`,`key` FROM `assignments` WHERE `key`=" . $value2.($is_teacher?"":" AND `disabled`=0")." LIMIT 1")) {
                                     while ($row2 = $results->fetch_assoc()) {
                                         echo template_assignment($row["period"],$value2,$row2["name"], $row2["concept"], $row2["chapter"], $row2["timeAccessible"], $row2["timeHide"], $row2["timeDue"], $row2["disabled"]);
                                     }
-                               } else {
+                                } else {
                                     log_error("find uncompleted assignment","databse","key $value2 isTeacher ".($is_teacher?"true":" false"));
                                }
                             }

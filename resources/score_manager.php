@@ -20,6 +20,8 @@ function score_question_update($conn,$email,$question,$updateAll=false) {
                               $value["correct"]=false;
                          }
                     }
+               } else {
+                    log_error("get question","",$conn->error);
                }
                if($result = $conn->query("SELECT * FROM `hints` WHERE `email`=\"".$value["email"]."\" AND `question`=$key ORDER BY `hint` DESC LIMIT 1")){
                     $value["hintsReached"]=0;
@@ -27,13 +29,15 @@ function score_question_update($conn,$email,$question,$updateAll=false) {
                         $value["hintsReached"] = $row["hint"];
                     }
                     $result->close();
+               } else {
+                    log_error("get hints","",$conn->error);
                }
                if(!$conn->query("UPDATE `responces` SET `correct`=".($value["correct"]?1:0).", `points`=".$points.",`hintsReached`=".$value["hintsReached"]." WHERE `question`=$key")){
-                    echo "UPDATE `responces` SET `correct`=".$value["correct"].", `points`=".$points.",`hintsReached`=".$value["hintsReached"];
+                    log_error("update responces","",$conn->error);
                }
            }
      } else {
-          echo "Connection Failed";
+          log_error("get responces","",$conn->error);
      }
 }
 function score_assignment_update($conn,$email,$assignment,$infiniteTries) {
@@ -48,6 +52,8 @@ function score_assignment_update($conn,$email,$assignment,$infiniteTries) {
                               $completedQuestions++;
                               $totalPoints+=$row["points"];
                          }
+                    } else {
+                         log_error("get responces","",$conn->error);
                     }
                } else {
                     if($results=$conn->query("SELECT * FROM `responces` WHERE `assignmentKey`=$assignment AND `email`=\"$email\" AND `question`=$value ORDER BY `questionAttempt` DESC LIMIT 1")){
@@ -55,13 +61,17 @@ function score_assignment_update($conn,$email,$assignment,$infiniteTries) {
                               $completedQuestions++;
                               $totalPoints+=$row["points"];
                          }
+                    } else {
+                         log_error("get responces","",$conn->error);
                     }
                }
           }
           $percent_complete=round($completedQuestions/count($questions)*100);
-          $conn->query("INSERT INTO `user_assignments`(`email`, `assignmentKey`, `points`, `percentCompleted`) VALUES (\"$email\",$assignment,$totalPoints,$percent_complete)");
+          if(!$conn->query("INSERT INTO `user_assignments`(`email`, `assignmentKey`, `points`, `percentCompleted`) VALUES (\"$email\",$assignment,$totalPoints,$percent_complete)")){
+               log_error("insert user assignment cache","",$conn->error);
+          }
      } else {
-          echo "delete failed.";
+          log_error("delete user assignment cache","",$conn->error);
      }
 }
 function score_calculate($question_attempt,$hints_reached,$max_points){

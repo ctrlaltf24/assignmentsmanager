@@ -5,16 +5,23 @@ require_once "../resources/startsWithEndsWith.php";
 //template header put in later
 //$domain = ($_SERVER['HTTP_HOST'] != 'localhost'&&!endsWith($_SERVER['HTTP_HOST'],".localhost")) ? $_SERVER['HTTP_HOST'] : false;
 //setcookie("token","asfdasfafajdaesf098sudlj2mqcau5 30126tpio0ju89sflkajlskdjlads",(time()+60*60*1000),"/",$domain,($domain!=false?true:false),true);
-$conn->query("DELETE FROM token WHERE expire<".time());//clear out old entries
+if(!$conn->query("DELETE FROM token WHERE expire<".time())){//clear out old entries)
+    log_error("failed to delete tokens","",$conn->error);
+}
 //check to see if the user is already in the database, if so delete them.
 
 echo template_header(true,$logged_in,$is_teacher);
 if($result = $conn->query("SELECT * FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time())) {
     if ($result->num_rows != 0) {
-        $conn->query("DELETE FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time());
+        if(!$conn->query("DELETE FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time())){
+            log_error("failed to delete tokens","",$conn->error);
+        }
     }
+} else {
+    log_error("failed to get tokens","",$conn->error);
 }
 //add token to temparary token db
+// Make sure to add a check if this is uncommented
 //$conn->query("INSERT INTO token VALUES (\"".$conn->real_escape_string($_COOKIE['token'])."\",\"".$conn->real_escape_string("shaabanl@hsd.k12.or.us"/*figure out how to get email here*/)."\",".(time()+60*60*1000).",\"".$_SERVER['REMOTE_ADDR']."\")");
 
 require_once "../resources/gClient.php";

@@ -16,6 +16,8 @@ function canViewAssignment($assignment_key,$is_teacher=false,$conn,$user){
                 $return=true;
             }
             $results->close();
+        } else {
+            log_error("failed to get assignments","",$conn->error);
         }
         if($return){
             return true;
@@ -27,6 +29,8 @@ function canViewAssignment($assignment_key,$is_teacher=false,$conn,$user){
             while ($row = $result->fetch_assoc()) {
                 $found =true;
             }
+        } else {
+            log_error("failed to get assignments","",$conn->error);
         }
         if($found==false){
             return false;
@@ -49,12 +53,15 @@ function canViewAssignment($assignment_key,$is_teacher=false,$conn,$user){
                             while ($row = $result->fetch_assoc()) {
                                 $scheduleName = $row["scheduleName"];
                             }
+                        } else {
+                            log_error("failed to get teachers","",$conn->error);
                         }
                         $confirmed_is_from_class=true;
                     }
                 }
                 $result->close();
             } else {
+                log_error("failed to get classes","",$conn->error);
                 return false;
             }
         }
@@ -78,6 +85,8 @@ function canViewAssignment($assignment_key,$is_teacher=false,$conn,$user){
             } else {
                 echo "You cant access that assignment anymore/yet.";
             }
+        } else {
+            log_error("failed to get assignments","",$conn->error);
         }
         $result->close();
         */

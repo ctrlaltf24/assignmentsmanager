@@ -6,14 +6,17 @@ require_once "../../resources/questionFormat.php";
 //TODO: fix permission check
 if(!$is_teacher){
     if(!questionInAssignment($_GET['assignmentKey'],$_GET['questionKey'],$conn,$is_teacher)){
-        echo "Incorrect arguments.";
-        $conn->query("INSERT INTO nosy_students (`email`, `attemptedAcssesPage`, `time`) VALUES (\"" . $user["email"] . "\",\"" . urldecode($_SERVER["REQUEST_URI"])." Tried changing the question off of the assignment" . "\"," . time() . ")");
-        exit();
+        if(!$conn->query("INSERT INTO nosy_students (`email`, `attemptedAcssesPage`, `time`) VALUES (\"" . $user["email"] . "\",\"" . urldecode($_SERVER["REQUEST_URI"])." Tried changing the question off of the assignment" . "\"," . time() . ")")){
+            log_error("failed to insert into nosey students","",$conn->error);
+        }
+        log_error("question not in assignment","", $user["email"]." ".urldecode($_SERVER["REQUEST_URI"])." Tried changing the question off of the assignment");
     }
     if(!canViewAssignment($_GET['assignmentKey'],$is_teacher,$conn,$user)){
         echo "Incorrect arguments.";
-        $conn->query("INSERT INTO nosy_students (`email`, `attemptedAcssesPage`, `time`) VALUES (\"" . $user["email"] . "\",\"" . urldecode($_SERVER["REQUEST_URI"])." Tried acssesing a page that they didnt have acsess to." . "\"," . time() . ")");
-        exit();
+        if(!$conn->query("INSERT INTO nosy_students (`email`, `attemptedAcssesPage`, `time`) VALUES (\"" . $user["email"] . "\",\"" . urldecode($_SERVER["REQUEST_URI"])." Tried acssesing a page that they didnt have acsess to." . "\"," . time() . ")")){
+            log_error("failed to insert into nosey students","",$conn->error);
+        }
+        log_error("can not view assignment","", $user["email"]." ".urldecode($_SERVER["REQUEST_URI"])." Tried acssesing a page that they didnt have acsess to");
     }
 }
 $answer = "";
@@ -25,8 +28,12 @@ if($result = $conn->query("SELECT * FROM `responces` WHERE `email`=\"".$user["em
         echo template_user_key($_GET['questionKey'],$conn,$user,$_GET["questionNumber"],$_GET["assignmentKey"],false,false,-1,true,$answer,false);
         exit();
     }
+} else {
+    log_error("failed to get responce","",$conn->error);
 }
-$result=$conn->query("SELECT * FROM `assignments` WHERE `key`=".$_GET['assignmentKey']." LIMIT 1");
+if(!$result=$conn->query("SELECT * FROM `assignments` WHERE `key`=".$_GET['assignmentKey']." LIMIT 1")){
+    log_error("failed to get assignment","",$conn->error);
+}
 $infinite_tries=false;
 $randomize=false;
 $teacherKey=null;
@@ -36,39 +43,54 @@ while ($row = $result->fetch_assoc()) {
     $teacherKey=$row["teacherKey"];
 }
 $result->close();
+if($teacherKey==null){
+    log_error("Assignment not found","",$_GET["assignmentKey"]);
+}
 if(!$infinite_tries){
      if($result = $conn->query("SELECT * FROM `responces` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=".$_GET['assignmentKey']." AND `question`=".$_GET['questionKey']." LIMIT 1")){
           while ($row = $result->fetch_assoc()) {
               echo template_user_key($_GET['questionKey'],$conn,$user,$_GET["questionNumber"],$_GET["assignmentKey"],$randomize,$infinite_tries,$teacherKey,false,$answer,false);
               exit();
           }
+     } else {
+        log_error("failed to get non-infite responce","",$conn->error);
      }
 }
 $questionAttempt=0;
-$result = $conn->query("SELECT * FROM `responces` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=".$_GET['assignmentKey']." AND `question`=".$_GET['questionKey']." ORDER BY `questionAttempt` DESC LIMIT 1");
+if (!$result = $conn->query("SELECT * FROM `responces` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=".$_GET['assignmentKey']." AND `question`=".$_GET['questionKey']." ORDER BY `questionAttempt` DESC LIMIT 1")){
+    log_error("failed to get infinite responce","",$conn->error);
+}
 while ($row = $result->fetch_assoc()) {
     $questionAttempt = $row["questionAttempt"]+1;
 }
 $result->close();
-$result = $conn->query("SELECT * FROM `hints` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=".$_GET['assignmentKey']." AND `question`=".$_GET['questionKey']." ORDER BY `hint` DESC LIMIT 1");
+if(!$result = $conn->query("SELECT * FROM `hints` WHERE `email`=\"".$user["email"]."\" AND `assignmentKey`=".$_GET['assignmentKey']." AND `question`=".$_GET['questionKey']." ORDER BY `hint` DESC LIMIT 1")){
+    log_error("failed to get hints","",$conn->error);
+}
 $hintsReached=0;
 while ($row = $result->fetch_assoc()) {
     $hintsReached = $row["hint"];
 }
 $result->close();
 $var_out="";
-$result = $conn->query("SELECT `variables` FROM `variables` WHERE `email`=\"".$user["email"]."\" AND `question`=".$_GET['questionKey']);
+if(!$result = $conn->query("SELECT `variables` FROM `variables` WHERE `email`=\"".$user["email"]."\" AND `question`=".$_GET['questionKey'])){
+    log_error("failed to get variables","",$conn->error);
+}
 while ($row = $result->fetch_assoc()) {
     $var_out=$row["variables"];
 }
 $result->close();
-$result=$conn->query("SELECT * FROM `questions` WHERE `key`=".$_GET['questionKey']." LIMIT 1");
+if (!$result=$conn->query("SELECT * FROM `questions` WHERE `key`=".$_GET['questionKey']." LIMIT 1")){
+    log_error("failed to get questions","",$conn->error);
+}
 $question=array();
 while ($row = $result->fetch_assoc()) {
     $question=$row;
 }
 $result->close();
-$result=$conn->query("SELECT `variables` FROM `variables` WHERE `email`=\"".$user["email"]."\" AND `question`=".$_GET['questionKey']);
+if(!$result=$conn->query("SELECT `variables` FROM `variables` WHERE `email`=\"".$user["email"]."\" AND `question`=".$_GET['questionKey'])){
+    log_error("failed to get variables","",$conn->error);
+}
 $vars=array();
 while($row=$result->fetch_assoc()){
     foreach (explode("|",$row["variables"]) as $key => $value){

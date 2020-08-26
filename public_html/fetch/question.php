@@ -23,7 +23,9 @@ foreach ($fields as $key => $value){
         array_push($whereClause,$key."=\"".$value."\"");
     }
 }
-$results=$conn->query("SELECT * FROM questions WHERE ".($whereClause==array()?"1":join(" AND ",$whereClause)));
+if(!$results=$conn->query("SELECT * FROM questions WHERE ".($whereClause==array()?"1":join(" AND ",$whereClause)))){
+    log_error("failed to get questions","",$conn->error);
+}
 $results->data_seek(0);
 while ($row = $results->fetch_assoc()) {
     echo template_option($row["key"],$row["name"]." (".$row["questionType"].") = ".$row["answer"].$row["units"].($row["level"]!=""?(" level = ".$row["level"]):""));

@@ -29,5 +29,4 @@ while($found){
 if(!$conn->query("INSERT INTO `classes`(`name`, `year`, `period`, `subject`, `teacherKey`, `assignmentKeys`, `day`,`classCode`) VALUES (\"".$_POST["name"]."\",\"".$_POST["year"]."\",\"".$_POST["period"]."\",\"".$_POST["subject"]."\",\"".$user["key"]."\",\"\",\"".$_POST["day"]."\",\"$classCode\")")){
     log_error("insert class","database",$conn->error);
 }
-echo $conn->error;
 template_footer();

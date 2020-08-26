@@ -5,8 +5,9 @@ require_once "../template/form.php";
 
 if(!isset($_GET["question_type"])){
     if(!isset($questionKey)) {
-        $results = $conn->query("SELECT * FROM question_types WHERE 1 ORDER BY name");
-        if ($results) {
+        if(!$results = $conn->query("SELECT * FROM question_types WHERE 1 ORDER BY name")){
+            log_error("failed to get question types","",$conn->error);
+        } else {
             $results->data_seek(0);
             while ($row = $results->fetch_assoc()) {
                 $display = "";
@@ -17,13 +18,13 @@ if(!isset($_GET["question_type"])){
                 }
                 echo "<a href='?question_type=" . $row["name"] . "'>$display</a><br>";
             }
-        } else {
-            return "ERROR";
         }
         $results->close();
         exit();
     } else {
-        $results = $conn->query("SELECT `questionType` FROM questions WHERE `key`=".$questionKey);
+        if(!$results = $conn->query("SELECT `questionType` FROM questions WHERE `key`=".$questionKey)){
+            log_error("failed to get questions","",$conn->error);
+        }
         if ($results) {
             $results->data_seek(0);
             while ($row = $results->fetch_assoc()) {
@@ -145,14 +146,16 @@ if(!isset($_GET["parent-question"])){
                 <div id="question-sub-question-tooltip<?php echo $extraID?>" class="mdl-tooltip mdl-tooltip--large question-sub-question-tooltip" data-mdl-for="question-sub-question-button<?php echo $extraID?>">Please start filling out the question before adding sub questions.</div>
                 <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect question-sub-question-dropdown" style="display:none;" for="question-sub-question-button<?php echo $extraID?>">
 					<?php
-			        $results=$conn->query("SELECT * FROM question_types WHERE 1 ORDER BY name");
+			        if(!$results=$conn->query("SELECT * FROM question_types WHERE 1 ORDER BY name")){
+                        log_error("failed to get question types","",$conn->error);
+                    }
 			        if($results) {
 			            $results->data_seek(0);
 			            while ($row = $results->fetch_assoc()) {
 			            	echo '<li class="mdl-menu__item" onclick="addEditableQuestion('."'".$row["name"]."'".',true,this)">'.$row["name"].'</li>';
 			            }
 			        } else {
-			            return "ERROR";
+                        log_error("failed to get question_types","",$conn->error);
 			        }
 			        ?>
 				</ul>
@@ -164,7 +167,9 @@ if(!isset($_GET["parent-question"])){
                 //dealing with text boxes
                 $rowy=array();
                 $subQuestions=array();
-                $results=$conn->query("SELECT `name`,`answer`,`level`,`concept`,`points`,`subject`,`units`,`chapter`,`concept`,`topic`,`subQuestions` FROM questions WHERE `key`=".$questionKey);
+                if(!$results=$conn->query("SELECT `name`,`answer`,`level`,`concept`,`points`,`subject`,`units`,`chapter`,`concept`,`topic`,`subQuestions` FROM questions WHERE `key`=".$questionKey)){
+                    log_error("failed to get questions","",$conn->error);
+                }
                 if($results) {
                     while ($row = $results->fetch_assoc()) {
                         $rowy = $row;
@@ -181,12 +186,14 @@ if(!isset($_GET["parent-question"])){
                         }
                     }
                 } else {
-                    echo $conn->error;
+                    log_error("failed to get questions","",$conn->error);
                 }
                 //dealing with recursive inputs
                 $results->close();
                 unset($rowy);
-                $results=$conn->query("SELECT `subQuestions`,`hints`,`possibleAnswers` FROM questions WHERE `key`=".$questionKey);
+                if(!$results=$conn->query("SELECT `subQuestions`,`hints`,`possibleAnswers` FROM questions WHERE `key`=".$questionKey)){
+                    log_error("failed to get questions","",$conn->error);
+                }
                 if($results) {
                     while ($row = $results->fetch_assoc()) {
                         $rowy = $row;
@@ -209,7 +216,7 @@ if(!isset($_GET["parent-question"])){
                     $results->close();
                     unset($rowy);
                 } else {
-                    echo $conn->error;
+                    log_error("failed to get questions","",$conn->error);
                 }
                 echo '});</script>';
             }
