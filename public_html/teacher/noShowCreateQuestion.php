@@ -103,13 +103,13 @@ if(!isset($_GET["parent-question"])){
                             echo template_textField("subject$extraID","subject","",true,(isset($_GET["subject"])?"value='".$_GET["subject"]."'":""));
                             echo template_options_SQL($conn,"SELECT DISTINCT name FROM subjects ORDER BY name","subject$extraID","name",array());
                             echo template_textField("chapter$extraID","chapter","",true,'onclick="$(\'#chapter'.$extraID.'-dropdown\').click()"'.(isset($_GET["chapter"])?"value='".$_GET["chapter"]."'":""));
-                            echo template_options_SQL($conn,"SELECT DISTINCT chapter FROM assignments WHERE `chapter`<> \"\" ORDER BY chapter","chapter$extraID","chapter");
+                            echo template_options_SQL($conn,"SELECT DISTINCT chapter FROM questions WHERE `chapter`<> \"\" ORDER BY chapter","chapter$extraID","chapter");
                             #echo template_options_sql_xml($conn,"SELECT chapter,subject FROM assignments GROUP BY chapter UNION SELECT chapter,subject FROM questions GROUP BY chapter ORDER BY chapter","chapter$extraID","chapter",array("subject"=>"subject$extraID"));
                             echo template_textField("concept$extraID","concept","",false,'onclick="$(\'#concept'.$extraID.'-dropdown\').click()"'.(isset($_GET["concept"])?"value='".$_GET["concept"]."'":""));
-                            echo template_options_SQL($conn,"SELECT DISTINCT concept FROM assignments WHERE `concept`<> \"\" ORDER BY concept","concept$extraID","concept");
+                            echo template_options_SQL($conn,"SELECT DISTINCT concept FROM questions WHERE `concept`<> \"\" ORDER BY concept","concept$extraID","concept");
                             #echo template_options_sql_xml($conn,"SELECT chapter,subject,concept FROM assignments GROUP BY concept UNION SELECT chapter,subject,concept FROM questions GROUP BY concept ORDER BY concept","concept$extraID","concept",array("subject"=>"subject$extraID","chapter"=>"chapter$extraID"));
                             echo template_textField("topic$extraID","topic","",false,'onclick="$(\'#topic'.$extraID.'-dropdown\').click()"');
-                            echo template_options_SQL($conn,"SELECT DISTINCT topic FROM assignments WHERE `topic`<> \"\" ORDER BY topic","topic$extraID","topic");
+                            echo template_options_SQL($conn,"SELECT DISTINCT topic FROM questions WHERE `topic`<> \"\" ORDER BY topic","topic$extraID","topic");
                             #echo template_options_sql_xml($conn,"SELECT chapter,subject,concept,topic FROM questions GROUP BY topic ORDER BY topic","topic$extraID","topic",array("subject"=>"subject$extraID","chapter"=>"chapter$extraID"));
                             ?>
                         </div>
