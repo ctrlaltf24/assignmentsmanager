@@ -128,7 +128,7 @@ function template_filters($conn,$user,$fields=NULL,$year=-1,$includeUnspecified=
                         echo template_ripple_a("None","style='width: calc(30% - 32px);' id=filter-$field-none onclick='$(this).parent().find(\"input:checked\").click().click().prop(\"checked\",false).parent().removeClass(\"is-checked\");'".($val?"":" onload='alert(\"test\");$(this).click();'"));
                         switch ($field) {
                             case "class":
-                                foreach (sql_to_array($conn,"SELECT name,period,`key`,`year` FROM `classes` WHERE `teacherKey`=".$user["key"]." AND (`year`= $year) ORDER BY `key`") as $key => $row) {
+                                foreach (sql_to_array($conn,"SELECT name,period,`key`,`year` FROM `classes` WHERE `teacherKey`=".$user["key"]." AND (`year`= $year) ORDER BY `name`") as $key => $row) {
                                     echo template_checkbox("filter-class-".stripFieldNames($row["key"]),(($year==date("Y")||$year==date("Y")-1)?"":($row["year"]." ")).$row["name"]." (P".$row["period"].")");
                                 }
                                 if($includeUnspecified) {
@@ -136,19 +136,19 @@ function template_filters($conn,$user,$fields=NULL,$year=-1,$includeUnspecified=
                                 }
                                 break;
                             case "subject":
-                                foreach (sql_to_array($conn,"SELECT DISTINCT subject FROM `assignments` WHERE `teacherKey`=".$user["key"],"subject") as $key => $value) {
+                                foreach (sql_to_array($conn,"SELECT DISTINCT subject FROM `assignments` WHERE `teacherKey`=".$user["key"]." ORDER BY `subject`","subject") as $key => $value) {
                                     if($value==""){$value="empty";}
                                     echo template_checkbox("filter-subject-".stripFieldNames($value),$value);
                                 }
                                 break;
                             case "chapter":
-                                foreach (sql_to_array($conn,"SELECT DISTINCT chapter FROM `assignments` WHERE `teacherKey`=".$user["key"],"chapter") as $key => $value) {
+                                foreach (sql_to_array($conn,"SELECT DISTINCT chapter FROM `assignments` WHERE `teacherKey`=".$user["key"]." ORDER BY `chapter`","chapter") as $key => $value) {
                                     if($value==""){$value="empty";}
                                     echo template_checkbox("filter-chapter-".stripFieldNames($value),$value,true);
                                 }
                                 break;
                             case "concept":
-                                foreach (sql_to_array($conn,"SELECT DISTINCT concept FROM `assignments` WHERE `teacherKey`=".$user["key"],"concept") as $key => $value) {
+                                foreach (sql_to_array($conn,"SELECT DISTINCT concept FROM `assignments` WHERE `teacherKey`=".$user["key"]." ORDER BY `concept`","concept") as $key => $value) {
                                     if($value==""){$value="empty";}
                                     echo template_checkbox("filter-concept-".stripFieldNames($value),$value);
                                 }
