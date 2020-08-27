@@ -1,3 +1,6 @@
 [submodule "resources/JBBCode"]
 	path = resources/JBBCode
 	url = https://github.com/jbowens/jBBCode.git
+[submodule "public_html/resources/CLNDR"]
+	path = public_html/resources/CLNDR
+	url = https://github.com/kylestetz/CLNDR.git
