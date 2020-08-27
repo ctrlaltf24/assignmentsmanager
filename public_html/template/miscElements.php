@@ -100,7 +100,15 @@ function template_tabs($data){
 }
 function template_filters($conn,$user,$fields=array("subject"=>true,"class"=>false,"chapter"=>true,"concept"=>true),$year=-1){
     if ($year==-1){
-        $year=(date("m")>=9?date("Y"):date("Y")-1);
+        if(date("m")>=5){// School is out
+            if (date("m")>=9) { //School has started again
+                $year=date("Y");
+            } else { // This is in between years
+                $year=date("Y")." OR `year`=".(date("Y")-1);
+            }
+        } else { // This is from the year before.
+            $year=date("Y")-1;
+        }
     }
     echo "<div class=\"mdl-card mdl-shadow--2dp demp-card\" style=\"padding:16px;\" id=\"filters\">
                 <div class=\"mdl-card__title mdl-grid\" style=\"width: 100%;\">
@@ -117,8 +125,8 @@ function template_filters($conn,$user,$fields=array("subject"=>true,"class"=>fal
                         echo template_ripple_a("None","style='width: calc(30% - 32px);' id=filter-$field-none onclick='$(this).parent().find(\"input:checked\").click().click().prop(\"checked\",false).parent().removeClass(\"is-checked\");'".($val?"":" onload='alert(\"test\");$(this).click();'"));
                         switch ($field) {
                             case "class":
-                                foreach (sql_to_array($conn,"SELECT name,period,`key` FROM `classes` WHERE `teacherKey`=".$user["key"]." AND `year`= $year ORDER BY `key`") as $key => $row) {
-                                    echo template_checkbox("filter-class-".stripFieldNames($row["key"]),$row["name"]." (Period ".$row["period"].")");
+                                foreach (sql_to_array($conn,"SELECT name,period,`key`,`year` FROM `classes` WHERE `teacherKey`=".$user["key"]." AND `year`= $year ORDER BY `key`") as $key => $row) {
+                                    echo template_checkbox("filter-class-".stripFieldNames($row["key"]),(($year==date("Y")||$year==date("Y")-1)?"":($row["year"]." ")).$row["name"]." (P".$row["period"].")");
                                 }
                                 break;
                             case "subject":
