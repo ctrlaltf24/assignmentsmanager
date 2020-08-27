@@ -1,0 +1,3 @@
+[submodule "resources/JBBCode"]
+	path = resources/JBBCode
+	url = https://github.com/jbowens/jBBCode.git
