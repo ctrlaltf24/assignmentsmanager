@@ -47,7 +47,7 @@ function template_button($display,$extra_button=""){
 }
 
 function template_assignment($key_in_arr,$key,$name, $concept, $chapter, $timeAccessible, $timeHide, $timeDue, $disabled,$completed=false,$percent_complete=0,$points=0,$max_points=0){
-    $id=str_replace(array(" ","(",")",".","#","&amp;",";","&",",","/","\\"),"",$name.$key_in_arr);
+    $id=stripFieldNames($name.$key_in_arr);
     return template_card($name." (Chapter $chapter) ($concept)".($disabled?" DISABLED":""),"<div id=\"p-$id\" class=\"mdl-progress mdl-js-progress\"></div>"."<script>document.querySelector('#p-$id').addEventListener('mdl-componentupgraded', function() {
     this.MaterialProgress.setProgress($percent_complete);
 });</script>",template_ripple_a("Go to assignment",'href=noShowAssignment.php?key='.$key).($max_points!=0?"<span class=\"mdl-chip\">
@@ -98,9 +98,20 @@ function template_tabs($data){
     $output.='</div>';
     return $output;
 }
-function template_filters($conn,$user,$fields=array("subject"=>true,"class"=>false,"chapter"=>true,"concept"=>true),$year=-1){
+function template_filters($conn,$user,$fields=NULL,$year=-1,$includeUnspecified=false){
+    if($fields===NULL){
+        $fields=array("subject"=>true,"class"=>false,"chapter"=>true,"concept"=>true);
+    }
     if ($year==-1){
-        $year=(date("m")>=9?date("Y"):date("Y")-1);
+        if(date("m")>=5){// School is out
+            if (date("m")>=9) { //School has started again
+                $year=date("Y");
+            } else { // This is in between years
+                $year=date("Y")." OR `year`=".(date("Y")-1);
+            }
+        } else { // This is from the year before.
+            $year=date("Y")-1;
+        }
     }
     echo "<div class=\"mdl-card mdl-shadow--2dp demp-card\" style=\"padding:16px;\" id=\"filters\">
                 <div class=\"mdl-card__title mdl-grid\" style=\"width: 100%;\">
@@ -117,8 +128,11 @@ function template_filters($conn,$user,$fields=array("subject"=>true,"class"=>fal
                         echo template_ripple_a("None","style='width: calc(30% - 32px);' id=filter-$field-none onclick='$(this).parent().find(\"input:checked\").click().click().prop(\"checked\",false).parent().removeClass(\"is-checked\");'".($val?"":" onload='alert(\"test\");$(this).click();'"));
                         switch ($field) {
                             case "class":
-                                foreach (sql_to_array($conn,"SELECT name,period,`key` FROM `classes` WHERE `teacherKey`=".$user["key"]." AND `year`= $year ORDER BY `key`") as $key => $row) {
-                                    echo template_checkbox("filter-class-".stripFieldNames($row["key"]),$row["name"]." (Period ".$row["period"].")");
+                                foreach (sql_to_array($conn,"SELECT name,period,`key`,`year` FROM `classes` WHERE `teacherKey`=".$user["key"]." AND (`year`= $year) ORDER BY `key`") as $key => $row) {
+                                    echo template_checkbox("filter-class-".stripFieldNames($row["key"]),(($year==date("Y")||$year==date("Y")-1)?"":($row["year"]." ")).$row["name"]." (P".$row["period"].")");
+                                }
+                                if($includeUnspecified) {
+                                    echo template_checkbox("filter-class-unspecified","Unspecified Class");
                                 }
                                 break;
                             case "subject":
@@ -183,4 +197,11 @@ function template_filters($conn,$user,$fields=array("subject"=>true,"class"=>fal
                     </arrow>
                 </div>
             </div>";
+}
+function stripFieldNames($str){
+    if($str==""||$str==null){
+        return "empty";
+    }
+    // removing special charecters and replacing them with a description to avoid collisions in ids
+    return str_replace(array(" ","(",")",".","#","&",";",",","/","\\","=","[","]","{","}"),array("space","openparenthasis","closedparethisis","period","hastag","amp","semicolon","amp","comma","slash","backslash","equals","openbracket","closedbracket","opencurly","closecurley"),$str);
 }

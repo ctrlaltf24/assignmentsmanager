@@ -11,15 +11,18 @@ assignees: ctrlaltf24
 **Error Code**
 Paste the error code here
 
+**Time**
+When did this happen? 
+
 **Environment**
-When did this happen? Was it on production or staging?
+Was it on production or staging?
 
 **Description of action**
 A clear and concise description of what you were doing when the error occurred
 
 **To Reproduce**
 Steps to reproduce the behavior:
-1. Go to '...'
+1. Go to '...' (include URL)
 2. Click on '....'
 3. Scroll down to '....'
 4. See error

@@ -9,7 +9,7 @@ echo template_header(true, $logged_in, $is_teacher);?>
     <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--12-col-tablet mdl-cell--1-offset-desktop">
             <?php
-            echo template_filters($conn,$user);
+            echo template_filters($conn,$user,NULL,-1,true);
             require_once "../../../staging_resources/classFunctions.php";
             $header=array("Student Name"=>"Student Name");
             $max_points=array();
@@ -19,6 +19,16 @@ echo template_header(true, $logged_in, $is_teacher);?>
             require_once "../../../staging_resources/assignmentFunctions.php";
             $header=array("Checkbox"=>"","Chapter"=>"Chapter","Name"=>"Name","Time Accessible"=>"Time Accessible","Time Due"=>"Time Due","Time Hide"=>"Time Hide","Edit"=>"Edit","Responces"=>"Responces");
             require_once "../../../staging_resources/assignmentFunctions.php";
+            $year=date("Y");
+            if(date("m")>=5){// School is out
+                if (date("m")>=9) { //School has started again
+                    $year=date("Y");
+                } else { // This is in between years
+                    $year=date("Y")." OR `year`=".(date("Y")-1);
+                }
+            } else { // This is from the year before.
+                $year=date("Y")-1;
+            }
             foreach (sql_to_array($conn,"SELECT * FROM assignments WHERE `teacherKey`=".$user["key"]." ORDER BY `key` DESC") as $row) {
                 $data[$row["key"]]["Checkbox"]=template_checkbox($row["key"]."-checkbox","",false);
                 $data[$row["key"]]["Chapter"]=$row["chapter"];
@@ -29,8 +39,11 @@ echo template_header(true, $logged_in, $is_teacher);?>
                 $data[$row["key"]]["Edit"]=template_ripple_a("Edit","href=createAssignment.php?key=".$row["key"]);
                 $data[$row["key"]]["Responces"]=template_ripple_a("Responces","href=noShowViewAssignment.php?key=".$row["key"]);
                 $HTMLClasses[$row["key"]]="\"filter-subject-".stripFieldNames($row["subject"])." filter-chapter-".stripFieldNames($row["chapter"])." filter-concept-".stripFieldNames($row["concept"]);
-                foreach (sql_to_array($conn,"SELECT `key` FROM classes WHERE assignmentKeys LIKE '%;".$row["key"].";%'","key") as $class){
+                foreach (sql_to_array($conn,"SELECT `key` FROM classes WHERE (`year`=$year) AND assignmentKeys LIKE '%;".$row["key"].";%'","key") as $class){
                     $HTMLClasses[$row["key"]].=" filter-class-".$class;
+                }
+                if(!(strpos($HTMLClasses[$row["key"]]," filter-class-")!==false)){
+                    $HTMLClasses[$row["key"]].=" filter-class-unspecified";// add a non-specified class
                 }
                 $HTMLClasses[$row["key"]].="\"";
             }
