@@ -1,5 +1,5 @@
 <?php
-require_once '../../resources/JBBCode/JBBCode/Parser.php';
+require_once 'JBBCode/JBBCode/Parser.php';
 function format_text_tilde_codes($question,$vars,$teacher_id,$question_number=0,$set_val=false,$conn=null,$user=null){
     if(!is_array($vars)){
         $vars=array();
