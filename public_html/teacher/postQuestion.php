@@ -14,7 +14,8 @@ if(isset($_GET["key"])){
     $query=preg_replace('/(, (?!.*, ))/', '', $query);
     //TODO: ADD TEACHER PERMISSION CHECK RIGHT HERE! is this needed due to being in a teacher folder though?
     if($query===""){
-        log_error("Nothing given","query is empty",$conn->error);
+        // simply ignore this post.
+        exit();
     }
     if(!$conn->query("UPDATE `questions` SET ".$query." WHERE `key`=".$_GET["key"])){
         log_error("question update","database error",$conn->error);

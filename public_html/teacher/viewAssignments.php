@@ -17,8 +17,7 @@ echo template_header(true, $logged_in, $is_teacher);?>
             $HTMLClasses=array();
             $HTMLHeaderClasses=array();
             require_once "../../../staging_resources/assignmentFunctions.php";
-            $header=array("Checkbox"=>"","Chapter"=>"Chapter","Name"=>"Name","Time Accessible"=>"Time Accessible","Time Due"=>"Time Due","Time Hide"=>"Time Hide","Edit"=>"Edit","Responces"=>"Responces");
-            require_once "../../../staging_resources/assignmentFunctions.php";
+            $header=array("Checkbox"=>"","Chapter"=>"Chapter","Name"=>"Name","Edit"=>"Edit","Responces"=>"Responces","Time Accessible"=>"Time Accessible","Time Due"=>"Time Due","Time Hide"=>"Time Hide");
             $year=date("Y");
             if(date("m")>=5){// School is out
                 if (date("m")>=9) { //School has started again
@@ -30,23 +29,25 @@ echo template_header(true, $logged_in, $is_teacher);?>
                 $year=date("Y")-1;
             }
             foreach (sql_to_array($conn,"SELECT * FROM assignments WHERE `teacherKey`=".$user["key"]." ORDER BY `key` DESC") as $row) {
-                $data[$row["key"]]["Checkbox"]=template_checkbox($row["key"]."-checkbox","",false);
-                $data[$row["key"]]["Chapter"]=$row["chapter"];
-                $data[$row["key"]]["Name"]=$row["name"];
-                $data[$row["key"]]["Time Accessible"]=$row["timeAccessible"];
-                $data[$row["key"]]["Time Due"]=$row["timeDue"];
-                $data[$row["key"]]["Time Hide"]=$row["timeHide"];
-                $data[$row["key"]]["Edit"]=template_ripple_a("Edit","href=createAssignment.php?key=".$row["key"]);
-                $data[$row["key"]]["Responces"]=template_ripple_a("Responces","href=noShowViewAssignment.php?key=".$row["key"]);
-                $HTMLClasses[$row["key"]]="\"filter-subject-".stripFieldNames($row["subject"])." filter-chapter-".stripFieldNames($row["chapter"])." filter-concept-".stripFieldNames($row["concept"]);
+                $identifer=$row["name"]." ".$row["key"];
+                $data[$identifer]["Checkbox"]=template_checkbox($row["key"]."-checkbox","",false);
+                $data[$identifer]["Name"]=$row["name"];
+                $data[$identifer]["Chapter"]=$row["chapter"];
+                $data[$identifer]["Edit"]=template_ripple_a("Edit","href=createAssignment.php?key=".$row["key"]);
+                $data[$identifer]["Responces"]=template_ripple_a("Responces","href=noShowViewAssignment.php?key=".$row["key"]);
+                $data[$identifer]["Time Accessible"]=$row["timeAccessible"];
+                $data[$identifer]["Time Due"]=$row["timeDue"];
+                $data[$identifer]["Time Hide"]=$row["timeHide"];
+                $HTMLClasses[$identifer]="\"filter-subject-".stripFieldNames($row["subject"])." filter-chapter-".stripFieldNames($row["chapter"])." filter-concept-".stripFieldNames($row["concept"]);
                 foreach (sql_to_array($conn,"SELECT `key` FROM classes WHERE (`year`=$year) AND assignmentKeys LIKE '%;".$row["key"].";%'","key") as $class){
-                    $HTMLClasses[$row["key"]].=" filter-class-".$class;
+                    $HTMLClasses[$identifer].=" filter-class-".$class;
                 }
-                if(!(strpos($HTMLClasses[$row["key"]]," filter-class-")!==false)){
-                    $HTMLClasses[$row["key"]].=" filter-class-unspecified";// add a non-specified class
+                if(!(strpos($HTMLClasses[$identifer]," filter-class-")!==false)){
+                    $HTMLClasses[$identifer].=" filter-class-unspecified";// add a non-specified class
                 }
-                $HTMLClasses[$row["key"]].="\"";
+                $HTMLClasses[$identifer].="\"";
             }
+            ksort($data);
             echo template_table($data,$header,"assignment-table",$HTMLClasses,$HTMLHeaderClasses);
             ?>
         </div>
