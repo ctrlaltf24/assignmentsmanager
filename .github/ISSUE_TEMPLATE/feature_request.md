@@ -10,6 +10,9 @@ assignees: ctrlaltf24
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
+**What page(s) are effected?**
+Which pages does this apply to? Please include URLs.
+
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen.
 
