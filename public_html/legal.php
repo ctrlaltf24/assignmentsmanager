@@ -16,6 +16,14 @@ echo template_header(true,$logged_in,$is_teacher);
                     <a href="https://fontlibrary.org/en/font/pepsi-cyr-lat">Font: Pepsi Cyr Lat Made by Dmitry Astakhov. Russia, Penza.</a>
                     <h5>Calendar Popup</h5>
                     <a href="https://github.com/kylestetz/CLNDR">CLNDR</a>
+                    <h5>BBCode Parsing</h5>
+                    <a href="https://github.com/jbowens/jBBCode">JBBCode</a>
+                    <h5>Math Rendering</h5>
+                    <a href="https://github.com/mathjax/MathJax">MathJax</a>
+                    <h5>LaTeX Editor</h5>
+                    <a href="https://sourceforge.net/projects/visualasciimath/">Visual Math Editor</a>
+                    <h5>BBCode Editor</h5>
+                    <a href="https://github.com/samclarke/SCEditor">sceditor</a>
                     <h5>General website template</h5>
                     <a href="https://getmdl.io/">Material Design Lite</a>
                 </div>
