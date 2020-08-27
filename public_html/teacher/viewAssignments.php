@@ -18,7 +18,6 @@ echo template_header(true, $logged_in, $is_teacher);?>
             $HTMLHeaderClasses=array();
             require_once "../../resources/assignmentFunctions.php";
             $header=array("Checkbox"=>"","Chapter"=>"Chapter","Name"=>"Name","Edit"=>"Edit","Responces"=>"Responces","Time Accessible"=>"Time Accessible","Time Due"=>"Time Due","Time Hide"=>"Time Hide");
-            require_once "../../resources/assignmentFunctions.php";
             $year=date("Y");
             if(date("m")>=5){// School is out
                 if (date("m")>=9) { //School has started again
