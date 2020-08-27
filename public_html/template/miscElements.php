@@ -125,7 +125,7 @@ function template_filters($conn,$user,$fields=array("subject"=>true,"class"=>fal
                         echo template_ripple_a("None","style='width: calc(30% - 32px);' id=filter-$field-none onclick='$(this).parent().find(\"input:checked\").click().click().prop(\"checked\",false).parent().removeClass(\"is-checked\");'".($val?"":" onload='alert(\"test\");$(this).click();'"));
                         switch ($field) {
                             case "class":
-                                foreach (sql_to_array($conn,"SELECT name,period,`key`,`year` FROM `classes` WHERE `teacherKey`=".$user["key"]." AND `year`= $year ORDER BY `key`") as $key => $row) {
+                                foreach (sql_to_array($conn,"SELECT name,period,`key`,`year` FROM `classes` WHERE `teacherKey`=".$user["key"]." AND (`year`= $year) ORDER BY `key`") as $key => $row) {
                                     echo template_checkbox("filter-class-".stripFieldNames($row["key"]),(($year==date("Y")||$year==date("Y")-1)?"":($row["year"]." ")).$row["name"]." (P".$row["period"].")");
                                 }
                                 break;
