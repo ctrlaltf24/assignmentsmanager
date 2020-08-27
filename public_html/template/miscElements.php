@@ -98,7 +98,10 @@ function template_tabs($data){
     $output.='</div>';
     return $output;
 }
-function template_filters($conn,$user,$fields=array("subject"=>true,"class"=>false,"chapter"=>true,"concept"=>true),$year=-1){
+function template_filters($conn,$user,$fields=NULL,$year=-1,$includeUnspecified=false){
+    if($fields===NULL){
+        $fields=array("subject"=>true,"class"=>false,"chapter"=>true,"concept"=>true);
+    }
     if ($year==-1){
         if(date("m")>=5){// School is out
             if (date("m")>=9) { //School has started again
@@ -127,6 +130,9 @@ function template_filters($conn,$user,$fields=array("subject"=>true,"class"=>fal
                             case "class":
                                 foreach (sql_to_array($conn,"SELECT name,period,`key`,`year` FROM `classes` WHERE `teacherKey`=".$user["key"]." AND (`year`= $year) ORDER BY `key`") as $key => $row) {
                                     echo template_checkbox("filter-class-".stripFieldNames($row["key"]),(($year==date("Y")||$year==date("Y")-1)?"":($row["year"]." ")).$row["name"]." (P".$row["period"].")");
+                                }
+                                if($includeUnspecified) {
+                                    echo template_checkbox("filter-class-unspecified","Unspecified Class");
                                 }
                                 break;
                             case "subject":
