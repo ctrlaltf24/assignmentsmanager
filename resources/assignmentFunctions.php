@@ -56,9 +56,3 @@ function getMaxPoints($conn,$assignment_key,$is_teacher=false){
      }
      return $totalPoints;
 }
-function stripFieldNames($str){
-    if($str==""||$str==null){
-        return "empty";
-    }
-    return str_replace("(","",str_replace(")","",str_replace(" ","_",str_replace(":","",$str))));
-}

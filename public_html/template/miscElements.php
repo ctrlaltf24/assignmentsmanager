@@ -47,7 +47,7 @@ function template_button($display,$extra_button=""){
 }
 
 function template_assignment($key_in_arr,$key,$name, $concept, $chapter, $timeAccessible, $timeHide, $timeDue, $disabled,$completed=false,$percent_complete=0,$points=0,$max_points=0){
-    $id=str_replace(array(" ","(",")",".","#","&amp;",";","&",",","/","\\"),"",$name.$key_in_arr);
+    $id=stripFieldNames($name.$key_in_arr);
     return template_card($name." (Chapter $chapter) ($concept)".($disabled?" DISABLED":""),"<div id=\"p-$id\" class=\"mdl-progress mdl-js-progress\"></div>"."<script>document.querySelector('#p-$id').addEventListener('mdl-componentupgraded', function() {
     this.MaterialProgress.setProgress($percent_complete);
 });</script>",template_ripple_a("Go to assignment",'href=noShowAssignment.php?key='.$key).($max_points!=0?"<span class=\"mdl-chip\">
@@ -191,4 +191,11 @@ function template_filters($conn,$user,$fields=array("subject"=>true,"class"=>fal
                     </arrow>
                 </div>
             </div>";
+}
+function stripFieldNames($str){
+    if($str==""||$str==null){
+        return "empty";
+    }
+    // removing special charecters and replacing them with a description to avoid collisions in ids
+    return str_replace(array(" ","(",")",".","#","&",";",",","/","\\","=","[","]","{","}"),array("space","openparenthasis","closedparethisis","period","hastag","amp","semicolon","amp","comma","slash","backslash","equals","openbracket","closedbracket","opencurly","closecurley"),$str);
 }
