@@ -11,6 +11,9 @@ assignees: ctrlaltf24
 **Error Code**
 Paste the error code here
 
+**Environment**
+When did this happen? Was it on production or staging?
+
 **Description of action**
 A clear and concise description of what you were doing when the error occurred
 
