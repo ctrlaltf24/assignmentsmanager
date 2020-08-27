@@ -1,5 +1,5 @@
 <?php
-require_once '../../../staging_resources/BBCodeParser/BBCodeParser.php';
+require_once '../../resources/JBBCode/JBBCode/Parser.php';
 function format_text_tilde_codes($question,$vars,$teacher_id,$question_number=0,$set_val=false,$conn=null,$user=null){
     if(!is_array($vars)){
         $vars=array();
@@ -92,7 +92,12 @@ function format_text_tilde_codes($question,$vars,$teacher_id,$question_number=0,
             }
         }
     }
-    $question=(new HTML_BBCodeParser())->qparse($question);
+    $parser = new JBBCode\Parser();
+    $parser->addCodeDefinitionSet(new JBBCode\DefaultCodeDefinitionSet());
+
+    $parser->parse($question);
+
+    $question=$parser->getAsHtml();
     if ($set_val) {
         $var_out = "";
         foreach ($vars as $key => $value){
