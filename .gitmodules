@@ -1,0 +1,15 @@
+[submodule "resources/JBBCode"]
+	path = resources/JBBCode
+	url = https://github.com/jbowens/jBBCode.git
+[submodule "public_html/resources/CLNDR"]
+	path = public_html/resources/CLNDR
+	url = https://github.com/kylestetz/CLNDR.git
+[submodule "public_html/resources/MathJax"]
+	path = public_html/resources/MathJax
+	url = https://github.com/mathjax/MathJax.git
+[submodule "public_html/resources/sceditor"]
+	path = public_html/resources/sceditor
+	url = https://github.com/samclarke/SCEditor.git
+[submodule "public_html/resources/googleAuth"]
+	path = public_html/resources/googleAuth_src
+	url = https://github.com/googleapis/google-api-php-client.git

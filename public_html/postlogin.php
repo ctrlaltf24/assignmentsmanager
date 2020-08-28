@@ -1,10 +1,5 @@
 <?php
 require "../resources/startsWithEndsWith.php";
-if(startsWith($_SERVER["REQUEST_URI"],"/assignmentsmanager/")){
-    echo "test";
-    header("Location: http://assignmentsmanager.localhost/".str_replace("/assignmentsmanager/","",$_SERVER["REQUEST_URI"]));
-    exit();
-}
 require_once "../resources/gClient.php";
 
 if(isset($_GET['code'])){
@@ -17,8 +12,12 @@ $userData = $oAuth->userinfo_v2_me->get();
 if($userData["verifiedEmail"]===true){
     require_once "../resources/connect.php";
     require_once "../resources/connectAdmin.php";
-    $conn->query("DELETE FROM `token` WHERE `expire`<".time());
-    $conn->query("INSERT INTO `token`(`token`, `email`, `expire`, `ip`) VALUES (\"".session_id()."\",\"".$userData["email"]."\",".(time()+8*60*60).",\""."0.0.0.0"."\")");
+    if(!$conn->query("DELETE FROM `token` WHERE `expire`<".time())){
+        log_error("failed to delete tokens","",$conn->error);
+    }
+    if(!$conn->query("INSERT INTO `token`(`token`, `email`, `expire`, `ip`) VALUES (\"".$_COOKIE["TOKEN"]."\",\"".$userData["email"]."\",".(time()+31*24*60*60).",\""."0.0.0.0"."\")")){
+        log_error("failed to insert tokens","",$conn->error);
+    }
     if ($result=$conn->query("SELECT * FROM users WHERE email = \"" . $userData["email"] . "\"")) {
         while ($row = $result->fetch_assoc()) {
             $found=true;
@@ -28,7 +27,10 @@ if($userData["verifiedEmail"]===true){
             exit();
         } else {
             header("Location: index.php");
+            exit();
         }
+    } else {
+        log_error("failed to get user","",$conn->error);
     }
 }
 header("Location: index.php");

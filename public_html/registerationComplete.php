@@ -8,20 +8,22 @@ echo template_header(true,$logged_in,$is_teacher);
             while ($row = $result->fetch_assoc()) {
                 $classKey = $row["key"];
             }
+        } else {
+            log_error("failed to get classes","",$conn->error);
         }
         if(isset($classKey)){
             if (!$conn->query("INSERT INTO `users`(`email`, `firstName`, `lastName`, `classKey`) VALUES (\"" . $user["email"] . "\",\"" . $_POST["first_name"] . "\",\"" . $_POST["last_name"] . "\",\";".$classKey.";\")")) {
-                echo "<h2 onload=\"window.location='index.php';\">Failure</h2>";
+                log_error("register user","databse",$conn->error);
             } else {
                 $col_id = $conn->insert_id;
                 echo "<h2 onload=\"window.location='index.php';\">Success</h2>";
                 header("Location: index.php");
             }
         } else {
-            echo "<h2>Error, please use a valid class code. You can go back to the <a href='register.php'>register page</a>.";
+            log_error("invalid class code");
         }
     } else {
-        echo "<h2>Error, please use the <a href='register.php'>register page</a>.";
+        log_error("invalid args");
     }
 /*} else {
     echo "<h2>You are not logged in, please <a href='login.php'>login</a>.</h2>";

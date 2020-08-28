@@ -7,6 +7,8 @@ function getStudentsClass($conn,$class){
         }
         $results->close();
         return $users;
+    } else {
+        log_error("failed to get users","",$conn->error);
     }
 }
 function getAssignmentClass($conn,$class){
@@ -18,7 +20,7 @@ function getAssignmentClass($conn,$class){
         $results->close();
         $assignments=array();
         foreach ($keys as $key => $value) {
-            if($value===""){
+            if(trim($value)==""){
                 unset($keys[$key]);
             } else {
                 if($results=$conn->query("SELECT * FROM `assignments` WHERE `key`=$value")){
@@ -30,6 +32,8 @@ function getAssignmentClass($conn,$class){
             }
         }
         return $assignments;
+    } else {
+        log_error("failed to get classes","",$conn->error);
     }
 }
 function getQuestionAssignmnet($conn,$assignment){
@@ -42,5 +46,7 @@ function getQuestionAssignmnet($conn,$assignment){
             return $questions;
         }
         $results->close();
+    } else {
+        log_error("failed to get assignments","",$conn->error);
     }
 }

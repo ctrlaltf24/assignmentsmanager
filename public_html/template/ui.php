@@ -5,9 +5,9 @@
 function template_header($showHeader=true,$logged_in=false,$is_teacher=false){
     echo "<html>
 <head>";
-    $path = ($_SERVER["HTTPS"]?"https":"http")."://".$_SERVER['HTTP_HOST']."/";
+    $path = "https://".$_SERVER['HTTP_HOST']."/";
     echo "
-    <title>Assignments Manager".(isset($_COOKIE["demo"])&&$_COOKIE["demo"]?" Demo":"")."</title>
+    <title>Assignments Manager</title>
     <script src=\"".$path."js/jquery-3.2.1.min.js\"></script>
     <script src=\"".$path."js/material.min.js\"></script>
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, minimum-scale=1.0\">
@@ -32,7 +32,7 @@ function template_header($showHeader=true,$logged_in=false,$is_teacher=false){
         $output.= "<header class=\"mdl-layout__header\">
         <div class=\"mdl-layout__header-row\">
             <a href='/' style='height: 100%;'><img class=\"mdl-logo\" src='/logoSmall.png'alt='Assignments Manager'></a>
-            <a href='/' class=\"mdl-layout-title\">Assignments Manager".(isset($_COOKIE["demo"])&&$_COOKIE["demo"]?" Demo":"")."</a>
+            <a href='/' class=\"mdl-layout-title\">Assignments Manager</a>
             <div class=\"mdl-layout-spacer\"></div>
             <nav class=\"mdl-navigation mdl-layout--large-screen-only\">";
         $output.=get_header_items($logged_in,$is_teacher,false);
@@ -40,7 +40,7 @@ function template_header($showHeader=true,$logged_in=false,$is_teacher=false){
         </div>
     </header>
     <div class=\"mdl-layout__drawer\">
-        <span class=\"mdl-layout-title\">Assignments Manager".(isset($_COOKIE["demo"])&&$_COOKIE["demo"]?" Demo":"")."</span>
+        <span class=\"mdl-layout-title\">Assignments Manager</span>
         <nav class=\"mdl-navigation\">";
         $output.=get_header_items($logged_in,$is_teacher,true);
         $output.="</nav>
@@ -91,11 +91,11 @@ function get_header_items($logged_in=false,$is_teacher=false,$drawer=false){
                 if(is_numeric($key)){//file
                     if(!startsWith($value,"post")&&!startsWith($value,"noShow")){
                     	if(startsWith(strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1), "Create")){
-                    		$array["Create"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=(stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/teacher/".$value;
+                    		$array["Create"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=('https://').$_SERVER['HTTP_HOST']."/teacher/".$value;
                     	} else if (startsWith(strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1), "View")) {
-                    		$array["View"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=(stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/teacher/".$value;
+                    		$array["View"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=('https://').$_SERVER['HTTP_HOST']."/teacher/".$value;
                     	} else {
-                    		$array[strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=(stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/teacher/".$value;
+                    		$array[strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=('https://').$_SERVER['HTTP_HOST']."/teacher/".$value;
                     	}
                     }
                 } else {//folder create a dropdown
@@ -109,7 +109,7 @@ function get_header_items($logged_in=false,$is_teacher=false,$drawer=false){
         foreach (dirToArray($_SERVER['DOCUMENT_ROOT']."/student") as $key => $value){
             if(is_numeric($key)){//file
                 if(!startsWith($value,"post")&&!startsWith($value,"noShow")){
-                	$array["Student"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=(stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://').$_SERVER['HTTP_HOST']."/student/".$value;
+                	$array["Student"][strtoupper(substr(pathinfo($value)['filename'],0,1)).substr(preg_replace("([A-Z])"," $0",pathinfo($value)['filename']),1)]=('https://').$_SERVER['HTTP_HOST']."/student/".$value;
                 }
             } else {//folder create a dropdown
                 if(!(substr($key, -strlen("/head")) === "/head")){//if it isnt the head folder
@@ -120,9 +120,6 @@ function get_header_items($logged_in=false,$is_teacher=false,$drawer=false){
         $output=get_header_html_from_array($array,$drawer);
     } else {
         $output= "<a class=\"mdl-navigation__link\" href=\"/login.php\">Login</a>";
-    }
-    if(isset($_COOKIE["demo"])&&$_COOKIE["demo"]){
-        $output .= "<a class=\"mdl-navigation__link\" href=\"/demo.php?reset=true\">Reset / Logout</a>";
     }
     return $output;
 }

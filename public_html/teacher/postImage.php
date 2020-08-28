@@ -10,7 +10,7 @@ if(!$logged_in||!$is_teacher){
 if($showUI){echo "<div class=\"mdl-grid\" style=\"width:75%\"";}
 if(isset($_FILES["fileToUpload"])) {
     for ($i=0;$i<count($_FILES["fileToUpload"]["name"]);$i++){
-        $target_dir = "../assets/images/teachers/".(isset($demo)&&$demo?"demo/":"").$user["key"]."/";
+        $target_dir = "../assets/images/teachers/".$user["key"]."/";
         if(!is_dir($target_dir)) {
             mkdir($target_dir);
         }
@@ -53,7 +53,7 @@ if(isset($_FILES["fileToUpload"])) {
                 echo "The file " . basename($_FILES["fileToUpload"]["name"][$i]) . " has been uploaded.<br>";
                 echo "<img style=\"width:100%\" src=\"$target_dir". basename($_FILES["fileToUpload"]["name"][$i])."\" />";
             } else {
-                echo "Sorry, there was an error uploading your file.<br>";
+                log_error("uploading file","",$_FILES["fileToUpload"]["tmp_name"][$i]." ".$target_file);
             }
         }
     }

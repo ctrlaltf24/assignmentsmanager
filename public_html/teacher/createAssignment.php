@@ -11,7 +11,7 @@ echo template_header(true,$logged_in,$is_teacher);
         <form action="postAssignment.php<?php if(isset($_GET["key"])){echo "?key=".$_GET["key"];}?>" method="post" id="assignment-form" class="assignment-form">
             <script>$( document ).ready(function() {$("#assignment-form input").on("click keydown blur",function() {checkSave($(".assignment-form"),$(this));});});</script>
             <input class="question-order" name="questions" style="display:none;"></input>
-            <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
+            <div class="mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
                 <div class="mdl-card__title mdl-grid" style="width: 100%;">
                     <h2 class="mdl-card__title-text mdl-cell mdl-cell--12-col">Create Assignment</h2>
                 </div>
@@ -31,7 +31,8 @@ echo template_header(true,$logged_in,$is_teacher);
                         <div class="mdl-cell mdl-cell--3-col">
                             <?php
                             echo template_textField("chapter-assignment","chapter","",true,'onclick="$(\'#chapter-assignment-dropdown\').click()"');
-                            echo template_options_sql_xml($conn,"SELECT chapter,subject FROM assignments GROUP BY chapter ORDER BY chapter","chapter-assignment","chapter",array("subject"=>"subject-assignment"));
+                            echo template_options_SQL($conn,"SELECT DISTINCT chapter FROM assignments WHERE `chapter`<> \"\" ORDER BY chapter","chapter-assignment","chapter");
+                           # echo template_options_sql_xml($conn,"SELECT chapter,subject FROM assignments GROUP BY chapter ORDER BY chapter","chapter-assignment","chapter",array("chapter"=>"chapter-assignment"));
                             ?>
                         </div>
                         <div class="mdl-cell mdl-cell--6-col">
@@ -39,7 +40,9 @@ echo template_header(true,$logged_in,$is_teacher);
                         </div>
                         <div class="mdl-cell mdl-cell--6-col">
                             <?php
-                            !$results=$conn->query("SELECT `key`,`name`,`year`,`period`,`subject` FROM classes WHERE teacherKey=\"".$user["key"]."\" ORDER BY year");
+                            if(!$results=$conn->query("SELECT `key`,`name`,`year`,`period`,`subject` FROM classes WHERE teacherKey=\"".$user["key"]."\" ORDER BY year")){
+                                log_error("failed to get class","",$conn->error);
+                            }
                             $results->data_seek(0);
                             while ($row = $results->fetch_assoc()) {
                                 echo "<label class=\"mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect\" for=\"class_".$row["key"]."\">
@@ -54,7 +57,8 @@ echo template_header(true,$logged_in,$is_teacher);
                         <div class="mdl-cell mdl-cell--6-col">
                             <?php
                             echo template_textField("concept-assignment","concept","",false,'onclick="$(\'#concept-assignment-dropdown\').click()"');
-                            echo template_options_sql_xml($conn,"SELECT chapter,subject,concept FROM assignments GROUP BY concept ORDER BY concept","concept-assignment","concept",array("subject"=>"subject-assignment","chapter"=>"chapter-assignment"));
+                            echo template_options_SQL($conn,"SELECT DISTINCT chapter FROM assignments WHERE `chapter`<> \"\" ORDER BY chapter","chapter-assignment","chapter");
+                            #echo template_options_sql_xml($conn,"SELECT chapter,subject,concept FROM assignments GROUP BY concept ORDER BY concept","concept-assignment","concept",array("subject"=>"subject-assignment","chapter"=>"chapter-assignment"));
                             echo template_checkbox("disabled","Disable Assignment",false);
                             echo template_checkbox("randomizeOrder","Randomize Question Order");
                             echo template_checkbox("infiniteTries","Infinite Tries");
@@ -86,7 +90,9 @@ echo template_header(true,$logged_in,$is_teacher);
                     echo '{';
                     //dealing with text boxes
                     $rowy=array();
-                    $results=$conn->query("SELECT `name`,`subject`,`chapter`,`concept` FROM assignments WHERE `key`=".$_GET["key"]);
+                    if(!$results=$conn->query("SELECT `name`,`subject`,`chapter`,`concept` FROM assignments WHERE `key`=".$_GET["key"])){
+                        log_error("failed to get assignments","",$conn->error);
+                    }
                     if($results) {
                         while ($row = $results->fetch_assoc()) {
                             $rowy = $row;
@@ -98,11 +104,13 @@ echo template_header(true,$logged_in,$is_teacher);
                             }
                         }
                     } else {
-                        echo $conn->error;
+                        log_error("failed to get assignments","",$conn->error);
                     }
                     $results->close();
                     //dealing with checkboxes
-                    $results=$conn->query("SELECT `disabled`,`randomizeOrder`,`infiniteTries` FROM assignments WHERE `key`=".$_GET["key"]);
+                    if(!$results=$conn->query("SELECT `disabled`,`randomizeOrder`,`infiniteTries` FROM assignments WHERE `key`=".$_GET["key"])){
+                        log_error("failed to get assignments","",$conn->error);
+                    }
                     if($results) {
                         while ($row = $results->fetch_assoc()) {
                             $rowy = $row;
@@ -117,25 +125,27 @@ echo template_header(true,$logged_in,$is_teacher);
                             }
                         }
                     } else {
-                        echo $conn->error;
+                        log_error("failed to get assignments","",$conn->error);
                     }
                     $results->close();
                     //dealing with assignment list
-                    $results=$conn->query("SELECT `key` FROM classes WHERE `assignmentKeys` LIKE '%;".$_GET["key"].";%' AND `teacherKey`=".$user["key"]);
+                    if(!$results=$conn->query("SELECT `key` FROM classes WHERE `assignmentKeys` LIKE '%;".$_GET["key"].";%' AND `teacherKey`=".$user["key"])){
+                        log_error("failed to get classes","",$conn->error);
+                    }
                     if($results) {
                         while ($row = $results->fetch_assoc()) {
                             echo '$("#class_' . $row["key"] . '").prop("checked",true);';
                             echo '$("#class_' . $row["key"] . '").parent().addClass("is-checked");';
                         }
                     } else {
-                        echo $conn->error;
+                        log_error("failed to get assignments","",$conn->error);
                     }
                     $results->close();
                     echo '});</script>';
                 }
                 ?>
             </div><br />
-            <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
+            <div class="mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
                 <div class="mdl-card__title mdl-grid" style="width: 100%;">
                     <h2 class="mdl-card__title-text mdl-cell mdl-cell--12-col">Help</h2>
                 </div>
@@ -186,7 +196,9 @@ echo template_header(true,$logged_in,$is_teacher);
     <div class="mdl-cell mdl-cell--10-col mdl-cell--1-offset" id="questions">
         <?php
             if(isset($_GET["key"])) {
-                $resultsQuestions = $conn->query("SELECT questions FROM assignments WHERE `key`=" . $_GET["key"]);
+                if(!$resultsQuestions = $conn->query("SELECT questions FROM assignments WHERE `key`=" . $_GET["key"])){
+                    log_error("failed to get assignments","",$conn->error);
+                }
                 if ($resultsQuestions) {
                     $resultsQuestions->data_seek(0);
                     $found=false;
@@ -206,6 +218,8 @@ echo template_header(true,$logged_in,$is_teacher);
                     	echo '<div id="question-placeholder"></div>';
                     }
                     $resultsQuestions->close();
+                } else {
+                    log_error("failed to get assignments","",$conn->error);
                 }
             } else {
             	echo '<div id="question-placeholder"></div>';
@@ -223,14 +237,16 @@ echo template_header(true,$logged_in,$is_teacher);
 	    <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="add_more_questions">
 	        <?php
 	        echo "<script>var questions=0;</script>";
-	        $results=$conn->query("SELECT * FROM question_types WHERE 1 ORDER BY name");
+	        if(!$results=$conn->query("SELECT * FROM question_types WHERE 1 ORDER BY name")){
+                log_error("failed to get question_types","",$conn->error);
+            }
 	        if($results) {
 	            $results->data_seek(0);
 	            while ($row = $results->fetch_assoc()) {
 	            	echo '<li class="mdl-menu__item" onclick="addEditableQuestion('."'".$row["name"]."'".',false,null)">'.$row["name"].'</li>';
 	            }
 	        } else {
-	            return "ERROR";
+	            log_error("failed to get question_types","",$conn->error);
 	        }
 	        ?>
 	    </ul>

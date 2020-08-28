@@ -19,14 +19,9 @@ echo template_header(true,$logged_in,$is_teacher);
         <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--12-col-tablet mdl-cell--2-offset-desktop">
             <h2>Welcome to the site!</h2>
             <p>This assignment management system was created for teachers with teachers in mind. It is a work in progress, and strives to be a flexible solution for homework/quiz creation and answer reporting.</p>
-            <?php if(!isset($demo)||!$demo){?>
-                <!--<a href="demo.php"><h3>Demo Here</h3></a>-->
-            <?php }  else { ?>
-            	<a href="demo.php"><h3>Go back to regular, non-demo mode</h3></a>
-            <?php } ?>
             <a href="http://class.assignmentsmanager.com"><h3>Go to the class information page.</h3></a>
             <h5>Features will include:</h5>
-            <ul class="demo-list-item mdl-list">
+            <ul class="mdl-list">
                 <li class="mdl-list__item">
                     <span class="mdl-list__item-primary-content">Random numbers in questions</span>
                 </li>
@@ -38,9 +33,6 @@ echo template_header(true,$logged_in,$is_teacher);
                 </li>
                 <li class="mdl-list__item">
                     <span class="mdl-list__item-primary-content">Answer reporting</span>
-                </li>
-                <li class="mdl-list__item">
-                    <span class="mdl-list__item-primary-content">No IP address long-term storage (small cache is kept to protect users during a session)</span>
                 </li>
             </ul>
         </div>

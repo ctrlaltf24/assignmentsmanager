@@ -37,13 +37,15 @@ if(isset($_GET["key"])){
             } else {
                 echo "There are no questions in this assignment.";
             }
+        } else {
+            log_error("failed to get assignments","",$conn->error);
         }
     } else {
-        echo "<br>Permission denied. This assignment is locked, not open yet, does not belong to your, or is not in the class you are enrolled in.";
+        log_error("Permission denied. This assignment is locked, not open yet, does not belong to your, or is not in the class you are enrolled in.","");
     }
     echo "</div></div>";
 } else {
-    echo "ERROR please use correct link";
+    log_error("ERROR please use correct link");
 }
 
 echo template_footer();

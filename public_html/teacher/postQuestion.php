@@ -12,14 +12,13 @@ if(isset($_GET["key"])){
         $query.="`".$key."`=\"".$value."\", ";
     }
     $query=preg_replace('/(, (?!.*, ))/', '', $query);
-    //TODO: ADD TEACHER PERMISSION CHECK RIGHT HERE!
+    //TODO: ADD TEACHER PERMISSION CHECK RIGHT HERE! is this needed due to being in a teacher folder though?
     if($query===""){
-        echo "<h2>Nothing given</h2>";
+        // simply ignore this post.
         exit();
     }
     if(!$conn->query("UPDATE `questions` SET ".$query." WHERE `key`=".$_GET["key"])){
-        $col_id=$conn->insert_id;
-        echo "<h2>Failure :( in update</h2>";
+        log_error("question update","database error",$conn->error);
     } else {
         $col_id=$conn->insert_id;
         echo $col_id;
@@ -29,48 +28,40 @@ if(isset($_GET["key"])){
         if(!isset($_POST["possibleAnswers"])){$_POST["possibleAnswers"]="";}
         if(!isset($_POST["answer"])){$_POST["answer"]="";}
         if (!$conn->query("INSERT INTO `questions`(`name`, `questionType`, `possibleAnswers`, `units`, `answer`, `hints`, `level`, `chapter`, `concept`, `subject`, `topic`, `points`, `subQuestions`,`teacherKey`) VALUES (\"" . $_POST["name"] . "\",\"" . $_POST["questionType"] . "\",\"" . $_POST["possibleAnswers"] . "\",\"" . $_POST["units"] . "\",\"" . $_POST["answer"] . "\",\"" . $_POST["hints"] . "\",\"" . $_POST["level"] . "\",\"" . $_POST["chapter"] . "\",\"" . $_POST["concept"] . "\",\"" . $_POST["subject"] . "\",\"" . $_POST["topic"] . "\",\"" . $_POST["points"] . "\",\"\",".$user["key"].")")) {
-            echo "Failed main insert $conn->error";
-            exit();
+            log_error("insert","main database",$conn->error);
         }
         $insertId = $conn->insert_id;
         echo $insertId;
         if (isset($_POST["parent-question"]) && $_POST["parent-question"] != "") {
             if (!$result = $conn->query("SELECT * FROM `questions` WHERE `key`=" . $_POST["parent-question"])) {
-            	echo $_POST["parent-question"];
-                echo "failed 2 > " . $conn->error;
-                exit();
+                log_error("target assignment","database",$_POST["parent-question"]." <-key,error-> ".$conn->error);
             }
             $previousSub = null;
             while ($row = $result->fetch_assoc()) {
                 $previousSub = ($row["subQuestions"] == null ? ";" : $row["subQuestions"]);
             }
             if ($previousSub === null) {
-                echo "failed to get target assignment";
-                exit();
+                log_error("target assignment","database",$_POST["parent-question"]." <-key,");
             }
             if (!$conn->query("UPDATE `questions` SET `subQuestions`=\"" . $previousSub . $insertId . ";\" WHERE `key`=" . $_POST["parent-question"])) {
-                echo "Failed updating subQ";
-                exit();
+                log_error("update subquestion","database",$conn->error);
             }
         } else if (isset($_POST["assignment"]) && $_POST["assignment"] != "") {
             if (!$result = $conn->query("SELECT * FROM `assignments` WHERE `key`=" . $_POST["assignment"])) {
-                echo "failed > " . $conn->error;
-                exit();
+                log_error("post assignment","database",$conn->error);
             }
             $previousQuestions = null;
             while ($row = $result->fetch_assoc()) {
                 $previousQuestions = ($row["questions"] == null ? ";" : $row["questions"]);
             }
             if ($previousQuestions === null) {
-                echo "failed to get target assignment";
-                exit();
+                log_error("get target assignment","find",$_POST["assignment"]);
             }
             if (!$conn->query("UPDATE `assignments` SET `questions`=\"" . $previousQuestions . $insertId . ";\" WHERE `key`=" . $_POST["assignment"])) {
-                echo "Failed updating assignments";
-                exit();
+                log_error("updating assignments","database",$conn->error);
             }
         }
     } else {
-        echo "nameless";
+        log_error("improper arguments","no name","");
     }
 }

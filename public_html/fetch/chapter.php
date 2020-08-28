@@ -5,13 +5,17 @@ if(!isset($subject)){
     $subject=$_GET["subject"];
 }
 $chapters = array();
-$results=$conn->query("SELECT DISTINCT chapter FROM assignments WHERE subject=\"".$subject."\"");
+if(!$results=$conn->query("SELECT DISTINCT chapter FROM assignments WHERE subject=\"".$subject."\"")){
+    log_error("failed to get chapters","",$conn->error);
+}
 $results->data_seek(0);
 while ($row = $results->fetch_assoc()) {
     array_push($chapters,$row["chapter"]);
 }
 $results->close();
-$results=$conn->query("SELECT DISTINCT chapter FROM questions WHERE subject=\"".$subject."\"");
+if(!$results=$conn->query("SELECT DISTINCT chapter FROM questions WHERE subject=\"".$subject."\"")){
+    log_error("failed to get chapters","",$conn->error);
+}
 $results->data_seek(0);
 while ($row = $results->fetch_assoc()) {
     array_push($chapters,$row["chapter"]);

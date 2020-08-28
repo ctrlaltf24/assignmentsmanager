@@ -5,8 +5,9 @@ require_once "../template/form.php";
 
 if(!isset($_GET["question_type"])){
     if(!isset($questionKey)) {
-        $results = $conn->query("SELECT * FROM question_types WHERE 1 ORDER BY name");
-        if ($results) {
+        if(!$results = $conn->query("SELECT * FROM question_types WHERE 1 ORDER BY name")){
+            log_error("failed to get question types","",$conn->error);
+        } else {
             $results->data_seek(0);
             while ($row = $results->fetch_assoc()) {
                 $display = "";
@@ -17,13 +18,13 @@ if(!isset($_GET["question_type"])){
                 }
                 echo "<a href='?question_type=" . $row["name"] . "'>$display</a><br>";
             }
-        } else {
-            return "ERROR";
         }
         $results->close();
         exit();
     } else {
-        $results = $conn->query("SELECT `questionType` FROM questions WHERE `key`=".$questionKey);
+        if(!$results = $conn->query("SELECT `questionType` FROM questions WHERE `key`=".$questionKey)){
+            log_error("failed to get questions","",$conn->error);
+        }
         if ($results) {
             $results->data_seek(0);
             while ($row = $results->fetch_assoc()) {
@@ -49,11 +50,11 @@ if(!isset($_GET["parent-question"])){
 }
 ?>
     <div class="mdl-cell mdl-cell--12-col">
-        <form id="question-form<?php echo $extraID?>" class="question-form<?php echo $extraID?>" action="<?php echo "http".(isset($_SERVER["HTTPS"])?"s":"")."://".$_SERVER['HTTP_HOST']."/teacher/postQuestion.php".(isset($questionKey)?"?key=".$questionKey:""); ?>" method="post">
+        <form id="question-form<?php echo $extraID?>" class="question-form<?php echo $extraID?>" action="<?php echo "https://".$_SERVER['HTTP_HOST']."/teacher/postQuestion.php".(isset($questionKey)?"?key=".$questionKey:""); ?>" method="post">
             <script>$( document ).ready(function() {$("#question-form<?php echo $extraID?> input,#question-form<?php echo $extraID?> textarea").on("click keydown blur",function() {checkSave($(".question-form<?php echo $extraID?>"),$(this));});});</script>
             <input value="<?php echo $_GET["question_type"]?>" style="display: none;" name="questionType">
             <input class="question-order" name="subQuestions" style="display:none;">
-            <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
+            <div class="mdl-card mdl-shadow--2dp" style="z-index: inherit;overflow: inherit;">
                 <?php /*<div class="mdl-card__title mdl-grid" style="width: 100%;">
                     <h2 class="mdl-card__title-text mdl-cell mdl-cell--12-col">Create Question<div class="mdl-card__subtitle-text" style="padding-top: 16px;padding-left: 8px;"><?php echo $_GET["question_type"];?></div></h2>
                 </div>*/?>
@@ -62,7 +63,7 @@ if(!isset($_GET["parent-question"])){
                         <div class="mdl-cell mdl-cell--12-col">
                             <?php
 								echo template_textArea("name$extraID","name","Question");
-							    $path = $_SERVER["REQUEST_SCHEME"]."://".$_SERVER['HTTP_HOST']."/";
+							    $path = "https://".$_SERVER['HTTP_HOST']."/";
                             ?>
                         </div>
                         <?php
@@ -102,11 +103,14 @@ if(!isset($_GET["parent-question"])){
                             echo template_textField("subject$extraID","subject","",true,(isset($_GET["subject"])?"value='".$_GET["subject"]."'":""));
                             echo template_options_SQL($conn,"SELECT DISTINCT name FROM subjects ORDER BY name","subject$extraID","name",array());
                             echo template_textField("chapter$extraID","chapter","",true,'onclick="$(\'#chapter'.$extraID.'-dropdown\').click()"'.(isset($_GET["chapter"])?"value='".$_GET["chapter"]."'":""));
-                            echo template_options_sql_xml($conn,"SELECT chapter,subject FROM assignments GROUP BY chapter UNION SELECT chapter,subject FROM questions GROUP BY chapter ORDER BY chapter","chapter$extraID","chapter",array("subject"=>"subject$extraID"));
+                            echo template_options_SQL($conn,"SELECT DISTINCT chapter FROM questions WHERE `chapter`<> \"\" ORDER BY chapter","chapter$extraID","chapter");
+                            #echo template_options_sql_xml($conn,"SELECT chapter,subject FROM assignments GROUP BY chapter UNION SELECT chapter,subject FROM questions GROUP BY chapter ORDER BY chapter","chapter$extraID","chapter",array("subject"=>"subject$extraID"));
                             echo template_textField("concept$extraID","concept","",false,'onclick="$(\'#concept'.$extraID.'-dropdown\').click()"'.(isset($_GET["concept"])?"value='".$_GET["concept"]."'":""));
-                            echo template_options_sql_xml($conn,"SELECT chapter,subject,concept FROM assignments GROUP BY concept UNION SELECT chapter,subject,concept FROM questions GROUP BY concept ORDER BY concept","concept$extraID","concept",array("subject"=>"subject$extraID","chapter"=>"chapter$extraID"));
+                            echo template_options_SQL($conn,"SELECT DISTINCT concept FROM questions WHERE `concept`<> \"\" ORDER BY concept","concept$extraID","concept");
+                            #echo template_options_sql_xml($conn,"SELECT chapter,subject,concept FROM assignments GROUP BY concept UNION SELECT chapter,subject,concept FROM questions GROUP BY concept ORDER BY concept","concept$extraID","concept",array("subject"=>"subject$extraID","chapter"=>"chapter$extraID"));
                             echo template_textField("topic$extraID","topic","",false,'onclick="$(\'#topic'.$extraID.'-dropdown\').click()"');
-                            echo template_options_sql_xml($conn,"SELECT chapter,subject,concept,topic FROM questions GROUP BY topic ORDER BY topic","topic$extraID","topic",array("subject"=>"subject$extraID","chapter"=>"chapter$extraID"));
+                            echo template_options_SQL($conn,"SELECT DISTINCT topic FROM questions WHERE `topic`<> \"\" ORDER BY topic","topic$extraID","topic");
+                            #echo template_options_sql_xml($conn,"SELECT chapter,subject,concept,topic FROM questions GROUP BY topic ORDER BY topic","topic$extraID","topic",array("subject"=>"subject$extraID","chapter"=>"chapter$extraID"));
                             ?>
                         </div>
                         <div class="mdl-cell--6-col mdl-cell">
@@ -145,14 +149,16 @@ if(!isset($_GET["parent-question"])){
                 <div id="question-sub-question-tooltip<?php echo $extraID?>" class="mdl-tooltip mdl-tooltip--large question-sub-question-tooltip" data-mdl-for="question-sub-question-button<?php echo $extraID?>">Please start filling out the question before adding sub questions.</div>
                 <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect question-sub-question-dropdown" style="display:none;" for="question-sub-question-button<?php echo $extraID?>">
 					<?php
-			        $results=$conn->query("SELECT * FROM question_types WHERE 1 ORDER BY name");
+			        if(!$results=$conn->query("SELECT * FROM question_types WHERE 1 ORDER BY name")){
+                        log_error("failed to get question types","",$conn->error);
+                    }
 			        if($results) {
 			            $results->data_seek(0);
 			            while ($row = $results->fetch_assoc()) {
 			            	echo '<li class="mdl-menu__item" onclick="addEditableQuestion('."'".$row["name"]."'".',true,this)">'.$row["name"].'</li>';
 			            }
 			        } else {
-			            return "ERROR";
+                        log_error("failed to get question_types","",$conn->error);
 			        }
 			        ?>
 				</ul>
@@ -164,7 +170,9 @@ if(!isset($_GET["parent-question"])){
                 //dealing with text boxes
                 $rowy=array();
                 $subQuestions=array();
-                $results=$conn->query("SELECT `name`,`answer`,`level`,`concept`,`points`,`subject`,`units`,`chapter`,`concept`,`topic`,`subQuestions` FROM questions WHERE `key`=".$questionKey);
+                if(!$results=$conn->query("SELECT `name`,`answer`,`level`,`concept`,`points`,`subject`,`units`,`chapter`,`concept`,`topic`,`subQuestions` FROM questions WHERE `key`=".$questionKey)){
+                    log_error("failed to get questions","",$conn->error);
+                }
                 if($results) {
                     while ($row = $results->fetch_assoc()) {
                         $rowy = $row;
@@ -181,12 +189,14 @@ if(!isset($_GET["parent-question"])){
                         }
                     }
                 } else {
-                    echo $conn->error;
+                    log_error("failed to get questions","",$conn->error);
                 }
                 //dealing with recursive inputs
                 $results->close();
                 unset($rowy);
-                $results=$conn->query("SELECT `subQuestions`,`hints`,`possibleAnswers` FROM questions WHERE `key`=".$questionKey);
+                if(!$results=$conn->query("SELECT `subQuestions`,`hints`,`possibleAnswers` FROM questions WHERE `key`=".$questionKey)){
+                    log_error("failed to get questions","",$conn->error);
+                }
                 if($results) {
                     while ($row = $results->fetch_assoc()) {
                         $rowy = $row;
@@ -209,7 +219,7 @@ if(!isset($_GET["parent-question"])){
                     $results->close();
                     unset($rowy);
                 } else {
-                    echo $conn->error;
+                    log_error("failed to get questions","",$conn->error);
                 }
                 echo '});</script>';
             }

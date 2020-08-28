@@ -18,14 +18,18 @@ echo template_header(true, $logged_in, $is_teacher);?>
 		echo '<script>$( document ).ready(function() {$(".points-input").on("click keydown blur",function() {checkSave($(this).parent().parent().parent().parent().parent().parent().parent().parent(),$(this));});});</script>';
 		foreach	($questions as $question){
 			$responces=array();
-			$result=$conn->query("SELECT * FROM `responces` WHERE `assignmentKey`=".$_GET["key"]." AND `question`=".$question." ORDER BY email,timeTaken");
+			if(!$result=$conn->query("SELECT * FROM `responces` WHERE `assignmentKey`=".$_GET["key"]." AND `question`=".$question." ORDER BY email,timeTaken")){
+				log_error("failed to get responces","",$conn->error);
+			}
 			while($row=$result->fetch_assoc()){
 				if(!isset($responces[$row["email"]])){
 					$responces[$row["email"]]=array();
 				}
 				array_push($responces[$row["email"]],$row);
 			}
-			$result=$conn->query("SELECT * FROM `questions` WHERE `key`=".$question." AND `teacherKey`=".$user["key"]." LIMIT 1");
+			if(!$result=$conn->query("SELECT * FROM `questions` WHERE `key`=".$question." AND `teacherKey`=".$user["key"]." LIMIT 1")){
+				log_error("failed to get questions","",$conn->error);
+			}
 			while($row=$result->fetch_assoc()){
 				$question=$row;
 			}
@@ -33,7 +37,9 @@ echo template_header(true, $logged_in, $is_teacher);?>
 			foreach ($responces as $email=>$responce_email) {
 				$description.="<tr>";
 				$found=false;
-				$result=$conn->query("SELECT `firstName`,`lastName` FROM `users` WHERE `email`='".$email."' LIMIT 1");
+				if(!$result=$conn->query("SELECT `firstName`,`lastName` FROM `users` WHERE `email`='".$email."' LIMIT 1")){
+					log_error("failed to get users","",$conn->error);
+				}
 				while($row=$result->fetch_assoc()){
 					$found=true;
 					$description.="<td style='width:15%'>".$row["firstName"]." ".$row["lastName"]."</td>";

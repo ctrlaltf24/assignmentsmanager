@@ -8,6 +8,8 @@ if ($result=$conn->query("SELECT * FROM users WHERE email = \"" . $user["email"]
     while ($row = $result->fetch_assoc()) {
         $found=true;
     }
+} else {
+    log_error("failed to get users","",$conn->error);
 }
 if($logged_in&&!$found) {
     ?>
