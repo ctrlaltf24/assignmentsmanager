@@ -10,7 +10,7 @@ if(!isset($_GET["key"])){
 	echo '<head><meta http-equiv="refresh" conent="0; url=viewAssignments.php" /></head><body><a href="viewAssignments.php">Please choose a key.</a></body>';
 	exit();
 }
-echo template_header(true, $logged_in, $is_teacher);?>
+echo template_header(true, $logged_in, $is_teacher,$user["email"]);?>
     <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--12-col-tablet mdl-cell--1-offset-desktop">
 		<?php

@@ -5,7 +5,7 @@ require_once "../template/miscElements.php";
 require_once "../template/form.php";
 require_once '../../resources/score_manager.php';
 require_once '../../resources/sqlArray.php';
-echo template_header(true, $logged_in, $is_teacher);?>
+echo template_header(true, $logged_in, $is_teacher,$user["email"]);?>
     <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--10-col-desktop mdl-cell--12-col-tablet mdl-cell--1-offset-desktop">
             <?php

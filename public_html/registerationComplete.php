@@ -1,7 +1,7 @@
 <?php
 require_once "template/ui.php";
 require_once "../resources/connect.php";
-echo template_header(true,$logged_in,$is_teacher);
+echo template_header(true,$logged_in,$is_teacher,$user["email"]);
 //if($logged_in) {
     if(isset($_POST["first_name"])&&isset($_POST["last_name"])&&isset($_POST["class_code"])) {
         if($result=$conn->query("SELECT `key` FROM `classes` WHERE `classCode`=\"".$_POST["class_code"]."\"")) {
