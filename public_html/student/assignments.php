@@ -3,7 +3,7 @@ require_once "../template/ui.php";
 require_once "../../../staging_resources/connect.php";
 require_once "../../../staging_resources/assignmentFunctions.php";
 require_once "../template/miscElements.php";
-echo template_header(true, $logged_in, $is_teacher);
+echo template_header(true, $logged_in, $is_teacher,$user["email"]);
 $classes = explode(";",$user["classKey"]);
 echo "
     <div class=\"mdl-grid\">

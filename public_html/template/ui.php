@@ -2,7 +2,7 @@
 /**
  * @param bool $showHeader
  */
-function template_header($showHeader=true,$logged_in=false,$is_teacher=false){
+function template_header($showHeader=true,$logged_in=false,$is_teacher=false,$email=null){
     echo "<html>
 <head>";
     $path = "https://".$_SERVER['HTTP_HOST']."/";
@@ -35,14 +35,14 @@ function template_header($showHeader=true,$logged_in=false,$is_teacher=false){
             <a href='/' class=\"mdl-layout-title\">Assignments Manager</a>
             <div class=\"mdl-layout-spacer\"></div>
             <nav class=\"mdl-navigation mdl-layout--large-screen-only\">";
-        $output.=get_header_items($logged_in,$is_teacher,false);
+        $output.=get_header_items($logged_in,$is_teacher,false,$email);
         $output.="    </nav>
         </div>
     </header>
     <div class=\"mdl-layout__drawer\">
         <span class=\"mdl-layout-title\">Assignments Manager</span>
         <nav class=\"mdl-navigation\">";
-        $output.=get_header_items($logged_in,$is_teacher,true);
+        $output.=get_header_items($logged_in,$is_teacher,true,$email);
         $output.="</nav>
     </div>";
     }
@@ -82,7 +82,7 @@ function dirToArray($dir) {
 /**
  * This is used as it needs to be done twice
  */
-function get_header_items($logged_in=false,$is_teacher=false,$drawer=false){
+function get_header_items($logged_in=false,$is_teacher=false,$drawer=false,$email=null){
     require_once $_SERVER['DOCUMENT_ROOT']."/../../staging_resources/startsWithEndsWith.php";
     $array=array();
     if($logged_in) {
@@ -118,6 +118,11 @@ function get_header_items($logged_in=false,$is_teacher=false,$drawer=false){
             }
         }
         $output=get_header_html_from_array($array,$drawer);
+        $rand=microtime();
+        $output.= "<a class=\"mdl-navigation__link\" id=\"logout$rand\" href=\"/logout.php\">Logout</a>";
+        if ($email != null){
+            $output.="<div class=\"mdl-tooltip\" data-mdl-for=\"logout$rand\">$email</div>";
+        }
     } else {
         $output= "<a class=\"mdl-navigation__link\" href=\"/login.php\">Login</a>";
     }

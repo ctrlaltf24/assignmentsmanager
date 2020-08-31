@@ -2,7 +2,7 @@
 require_once "../template/ui.php";
 require_once "../../../staging_resources/connect.php";
 require_once "../template/form.php";
-echo template_header(true,$logged_in,$is_teacher);
+echo template_header(true,$logged_in,$is_teacher,$user["email"]);
 ?>
 <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--8-col mdl-cell--2-offset">

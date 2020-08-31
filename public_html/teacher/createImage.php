@@ -2,7 +2,7 @@
 require_once "../template/ui.php";
 require_once "../../../staging_resources/connect.php";
 $showUI = isset($_GET["hideUI"])&&!$_GET["hideUI"]||!isset($_GET["hideUI"]);
-echo template_header($showUI,$logged_in,$is_teacher);
+echo template_header($showUI,$logged_in,$is_teacher,$user["email"]);
 if(!$logged_in||!$is_teacher){
     echo "not logged in or not a teacher.";
     exit();

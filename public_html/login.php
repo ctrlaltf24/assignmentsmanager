@@ -10,7 +10,7 @@ if(!$conn->query("DELETE FROM token WHERE expire<".time())){//clear out old entr
 }
 //check to see if the user is already in the database, if so delete them.
 
-echo template_header(true,$logged_in,$is_teacher);
+echo template_header(true,$logged_in,$is_teacher,$user["email"]);
 if($result = $conn->query("SELECT * FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time())) {
     if ($result->num_rows != 0) {
         if(!$conn->query("DELETE FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time())){

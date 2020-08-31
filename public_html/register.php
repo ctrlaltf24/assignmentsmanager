@@ -2,7 +2,7 @@
 require_once "template/ui.php";
 require_once "template/form.php";
 require_once "../../staging_resources/connect.php";
-echo template_header(true, $logged_in, $is_teacher);
+echo template_header(true, $logged_in, $is_teacher,$user["email"]);
 $found=false;
 if ($result=$conn->query("SELECT * FROM users WHERE email = \"" . $user["email"] . "\"")) {
     while ($row = $result->fetch_assoc()) {

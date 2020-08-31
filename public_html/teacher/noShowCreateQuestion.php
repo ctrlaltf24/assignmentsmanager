@@ -44,7 +44,7 @@ if(isset($questionKey)){
 if(!isset($_GET["assignment"])&&isset($assignmentKey)){
     $_GET["assignment"]=$assignmentKey;
 }
-//echo template_header(false,$logged_in,$is_teacher);
+//echo template_header(false,$logged_in,$is_teacher,$user["email"]);
 if(!isset($_GET["parent-question"])){
 	echo '<div class="mdl-grid">';
 }
