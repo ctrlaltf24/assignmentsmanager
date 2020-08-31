@@ -1,7 +1,7 @@
 <?php
 include "../template/ui.php";
 require_once "../../resources/connect.php";
-echo template_header(true,$logged_in,$is_teacher);
+echo template_header(true,$logged_in,$is_teacher,$user["email"]);
 //TODO: ADD SOME SORT OF SCRIPT TO MAKE SURE ALL INPUTS ARE LEGIT HERE OR IN createClass
 
 //add subject to subjects if it is not already there

@@ -1,7 +1,7 @@
 <?php
 include "template/ui.php";
 include "../resources/connect.php";
-echo template_header(true,$logged_in,$is_teacher);
+echo template_header(true,$logged_in,$is_teacher,$user["email"]);
 ?>
 
     <div class="mdl-grid">

@@ -1,7 +1,7 @@
 <?php
 require_once "../template/ui.php";
 require_once "../../resources/connect.php";
-echo template_header(true, $logged_in, $is_teacher);
+echo template_header(true, $logged_in, $is_teacher,$user["email"]);
 
 //get assignemnt key and display questions one by one
 if(isset($_GET["key"])){

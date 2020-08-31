@@ -3,7 +3,7 @@ include "template/ui.php";
 require_once "../resources/connect.php";
 require_once "../resources/startsWithEndsWith.php";
 //check to see if the user is in the database, if so delete them.
-echo template_header(true,$logged_in,$is_teacher);
+echo template_header(true,$logged_in,$is_teacher,$user["email"]);
 if($result = $conn->query("SELECT * FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time())) {
     if ($result->num_rows != 0) {
         if(!$conn->query("DELETE FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time())){

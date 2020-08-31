@@ -4,7 +4,7 @@ require_once "../../resources/connect.php";
 require_once "../template/form.php";
 require_once "../template/ui.php";
 require_once "../template/miscElements.php";
-echo template_header(true,$logged_in,$is_teacher);
+echo template_header(true,$logged_in,$is_teacher,$user["email"]);
 ?>
 <div class="mdl-grid" style="width:75%;padding-top:32px;" id="main-container">
     <div class="mdl-cell--12-col mdl-cell">
