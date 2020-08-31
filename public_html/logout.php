@@ -21,4 +21,4 @@ echo "<a href='index.php'>Log out sucessful</a>";
 <?php
 
 echo template_footer();
-header("Location: ".$loginUrl);
+header("Location: index.php");
