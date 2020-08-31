@@ -15,6 +15,15 @@ if($userData["verifiedEmail"]===true){
     if(!$conn->query("DELETE FROM `token` WHERE `expire`<".time())){
         log_error("failed to delete tokens","",$conn->error);
     }
+    if($result = $conn->query("SELECT * FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time())) {
+        if ($result->num_rows != 0) {
+            if(!$conn->query("DELETE FROM token WHERE token = \"".$_COOKIE["TOKEN"]."\" AND expire>".time())){
+                log_error("failed to delete tokens","",$conn->error);
+            }
+        }
+    } else {
+        log_error("failed to get tokens","",$conn->error);
+    }
     if(!$conn->query("INSERT INTO `token`(`token`, `email`, `expire`, `ip`) VALUES (\"".$_COOKIE["TOKEN"]."\",\"".$userData["email"]."\",".(time()+31*24*60*60).",\""."0.0.0.0"."\")")){
         log_error("failed to insert tokens","",$conn->error);
     }
